@@ -1,4 +1,13 @@
 //This module parses .env file data
+if (!Object.fromEntries) {
+    Object.fromEntries = function (entries) {
+        const obj = {};
+        for (const [key, value] of entries) {
+            obj[key] = value;
+        }
+        return obj;
+    };
+}
 
 module.exports = data => Object.fromEntries(data.split('\n').map(line => {
     if (!line.includes('=') || line.trim().startsWith('#')) return null;
