@@ -1,16 +1,16 @@
 {
   "name": "glitch-github-sync",
   "version": "1.0.0",
-  "description": "Glitch Github Sync",
-  "main": "server.js",
+  "main": "server/index.js",
   "scripts": {
     "start": "node --optimize-for-size --no-lazy --gc_interval=120 server/index"
   },
-  "author": "Natanael",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3",
-    "node-cmd": "^3.0.0",
-    "ws": "^8.13.0"
-  }
+    "ws": "^8.13.0",
+    "node-cmd": "^3.0.0"
+  },
+  "engines": {
+    "node": "^18.0.0"
+  },
+  "license": "MIT"
 }
