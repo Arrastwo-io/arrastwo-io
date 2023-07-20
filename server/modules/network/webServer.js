@@ -36,7 +36,7 @@ class App {
         next();
     }
 
-    verifySignature = (req, res, next) => {
+    verifySignature(req, res, next) {
         const payload = JSON.stringify(req.body)
         const hmac = crypto.createHmac('sha1', process.env.GITHUB_SECRET)
         const digest = 'sha1=' + hmac.update(payload).digest('hex')
@@ -125,7 +125,7 @@ function logMiddleware(req, res, next) {
 
 app.use(bodyParserJson);
 app.use(logMiddleware);
-app.post('/git', this.verifySignature, (req, res) => {
+app.post('/git', app.verifySignature, (req, res) => {
     if (req.headers['x-github-event'] == 'push') {
         cmd.get('bash git.sh', (err, data) => {
         if (err) return console.log(err)
