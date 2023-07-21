@@ -35,29 +35,6 @@ class App {
     
         next();
     }
-
-    verifySignature(req, res, next) {
-        const payload = JSON.stringify(req.body)
-        const hmac = crypto.createHmac('sha1', process.env.GITHUB_SECRET)
-        const digest = 'sha1=' + hmac.update(payload).digest('hex')
-        const checksum = req.headers['x-hub-signature']
-    
-        if (!checksum || !digest || checksum !== digest) {
-            return res.status(403).send('auth failed')
-        }
-    
-        return next()
-    }
-
-    post(path, handler) {
-        this.middlewareStack.push((req, res, next) => {
-            if (req.method === 'POST' && req.url === path) {
-                handler(req, res);
-            } else {
-                next();
-            }
-        });
-    }
     
     start(port) {
         const server = http.createServer(this.handleRequest.bind(this));
@@ -69,27 +46,6 @@ class App {
 
 const app = new App();
 
-function bodyParserJson(req, res, next) {
-    if (req.method === 'POST' && req.headers['content-type'] === 'application/json') {
-        let body = '';
-    
-        req.on('data', (chunk) => {
-            body += chunk.toString();
-        });
-    
-        req.on('end', () => {
-            try {
-            req.body = JSON.parse(body);
-            next();
-            } catch (error) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Invalid JSON data' }));
-            }
-        });
-    } else {
-        next();
-    }
-}
 function logMiddleware(req, res, next) {
     let resStr = "";
     switch (req.url) {
@@ -122,22 +78,7 @@ function logMiddleware(req, res, next) {
     res.writeHead(200);
     res.end(resStr);
 }
-
-app.use(bodyParserJson);
 app.use(logMiddleware);
-app.post('/git', app.verifySignature, (req, res) => {
-    if (req.headers['x-github-event'] == 'push') {
-        cmd.get('bash git.sh', (err, data) => {
-        if (err) return console.log(err)
-        console.log(data)
-        return res.status(200).send(data)
-        })
-    } else if (req.headers['x-github-event'] == 'ping') {
-        return res.status(200).send('PONG')
-    } else {
-        return res.status(200).send('Unsuported Github event. Nothing done.')
-    }
-})
 
 let server = app.start(c.port);
 module.exports = { server };
