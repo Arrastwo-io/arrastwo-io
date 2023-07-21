@@ -1,5 +1,5 @@
 module.exports = {
-    host: "arras2-io-.glitch.me",
+    host: "arras2-project.glitch.me",
     servesStatic: true,
     port: 3000,
     networkUpdateFactor: 24,
