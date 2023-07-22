@@ -156,14 +156,14 @@ function getColor(colorNumber) {
             return 150 > Date.now() % 300 ? color.red : color.grey;
         case 24:
             return 150 > Date.now() % 300 ? color.grey : color.red;
-      case 25:
-        return "#C49608";
-      case 26:
-        return "#EC7B0F";
-      case 27:
-        return "#895918";
-      case 28:
-        return "#13808E";
+        case 25:
+            return "#C49608";
+        case 26:
+            return "#EC7B0F";
+        case 27:
+            return "#895918";
+        case 28:
+            return "#13808E";
         case 30:
             return "#a913cf";
         case 31:
@@ -292,54 +292,45 @@ function getMockups() {
     });
 }
 window.onload = async () => {
-    window.serverAdd = (await (await fetch("/serverData.json")).json()).ip;
-    if (Array.isArray(window.serverAdd)) {
-        window.isMultiserver = true;
-        const servers = window.serverAdd;
-        let serverSelector = document.getElementById("serverSelector"),
-            tbody = document.createElement("tbody");
-        serverSelector.style.display = "block";
-        document
-            .getElementById("startMenuSlidingContent")
-            .removeChild(document.getElementById("serverName"));
-        serverSelector.classList.add("serverSelector");
-        serverSelector.classList.add("shadowscroll");
-        serverSelector.appendChild(tbody);
-        let myServer = {
-            classList: {
-                contains: () => false,
-            },
-        };
-        servers.forEach(async (server) => {
-            try {
-                const tr = document.createElement("tr");
-                const td = document.createElement("td");
-                td.textContent = `${server.gameMode} | ${server.players} Players`;
-                td.onclick = () => {
-                    if (myServer.classList.contains("selected")) {
-                        myServer.classList.remove("selected");
-                    }
-                    tr.classList.add("selected");
-                    myServer = tr;
-                    window.serverAdd = server.ip;
-                    getMockups();
-                };
-                tr.appendChild(td);
-                tbody.appendChild(tr);
+    const serverData = await (await fetch("/serverData.json")).json();
+    window.serverAdd = serverData[0].ip;
+    const servers = serverData;
+    let serverSelector = document.getElementById("serverSelector"),
+        tbody = document.createElement("tbody");
+    serverSelector.style.display = "block";
+    document
+        .getElementById("startMenuSlidingContent")
+        .removeChild(document.getElementById("serverName"));
+    serverSelector.classList.add("serverSelector");
+    serverSelector.classList.add("shadowscroll");
+    serverSelector.appendChild(tbody);
+    let myServer = {
+        classList: {
+            contains: () => false,
+        },
+    };
+    servers.forEach(async (server) => {
+        try {
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            td.textContent = `${server.gameMode} | ${server.players} Players`;
+            td.onclick = () => {
+                if (myServer.classList.contains("selected")) {
+                    myServer.classList.remove("selected");
+                }
+                tr.classList.add("selected");
                 myServer = tr;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-        if (Array.from(myServer.children)[0].onclick) {
-            Array.from(myServer.children)[0].onclick();
+                window.serverAdd = server.ip;
+                getMockups();
+            };
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            myServer = tr;
+        } catch (e) {
+            console.log(e);
         }
-    } else {
-        getMockups();
-        util.pullJSON("gamemodeData").then((json) => {
-            document.getElementById("serverName").innerHTML = `<h4 class="nopadding">${json.gameMode} | ${json.players} Players</h4>`;
-        });
-    }
+    });
+    if (Array.from(myServer.children)[0].onclick) Array.from(myServer.children)[0].onclick();
     // Save forms
     util.retrieveFromLocalStorage("playerNameInput");
     util.retrieveFromLocalStorage("playerKeyInput");

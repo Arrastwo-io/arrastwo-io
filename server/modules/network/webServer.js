@@ -1,7 +1,5 @@
 let fs = require('fs'),
     path = require('path'),
-    cmd = require('node-cmd'),
-    crypto = require('crypto'),
     publicRoot = path.join(__dirname, "../../../public"),
     mimeSet = {
         "js": "application/javascript",
@@ -18,11 +16,11 @@ class App {
     constructor() {
         this.middlewareStack = [];
     }
-    
+
     use(middleware) {
         this.middlewareStack.push(middleware);
     }
-    
+
     handleRequest(req, res) {
         let index = 0;
     
@@ -35,16 +33,34 @@ class App {
     
         next();
     }
-    
-    start(port) {
-        const server = http.createServer(this.handleRequest.bind(this));
-        server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => sockets.connect(ws, req)));
-        server.listen(port, () => console.log("Server listening on port", port));
-        return server;
+
+    start(server, port) {
+        let _server = http.createServer(this.handleRequest.bind(this));
+        _server.on('upgrade', (req, socket, head) => server.handleUpgrade(req, socket, head, ws => sockets.connect(ws, req)));
+        _server.listen(port, () => console.log("Server listening on port", port));
+        return _server;
     }
 }
 
 const app = new App();
+
+let servers = [
+    {
+        gameMode: c.gameModeName,
+        players: views.length,
+        ip: c.host
+    }
+    // {
+    //     gameMode: "FFA",
+    //     players: 0,
+    //     ip: c.host.split(":")[0] + ":3002"
+    // },
+    // {
+    //     gameMode: "Siege",
+    //     players: 0,
+    //     ip: c.host.split(":")[0] + ":3004"
+    // }
+];
 
 function logMiddleware(req, res, next) {
     let resStr = "";
@@ -52,16 +68,8 @@ function logMiddleware(req, res, next) {
         case "/lib/json/mockups.json":
             resStr = mockupJsonData;
             break;
-        case "/lib/json/gamemodeData.json":
-            resStr = JSON.stringify({
-                gameMode: c.gameModeName,
-                players: views.length,
-                code: [c.MODE, c.MODE === "ffa" ? "f" : c.TEAMS, c.secondaryGameMode].join("-"),
-                ip: c.host
-            });
-            break;
         case "/serverData.json":
-            resStr = JSON.stringify({ ok: true, ip: c.host });
+            resStr = JSON.stringify(servers);
             break;
         default:
             let fileToGet = path.join(publicRoot, req.url);
@@ -80,5 +88,5 @@ function logMiddleware(req, res, next) {
 }
 app.use(logMiddleware);
 
-let server = app.start(c.port);
+let server = app.start(wsServer, c.port);
 module.exports = { server };

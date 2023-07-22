@@ -593,6 +593,7 @@ const gamemodes = {
     },
 };
 
+if (defaults.host == "localhost") defaults.host = "localhost:" + defaults.port;
 const mode = gamemodes[gamemode];
 
 let output = {};
