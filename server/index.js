@@ -507,16 +507,16 @@ let makenpcs = () => {
 
         //TODO: add support for tag mode
         //NOTE: this code will
-        // if (c.GROUPS) {
-        //     let master = {
-        //         player: {
-        //             body: o,
-        //         },
-        //     };
-        //     groups.addMember(master);
-        //     o.team = -master.rememberedTeam;
-        //     o.on('dead', () => groups.removeMember(master));
-        // }
+        if (c.GROUPS) {
+            let master = {
+                player: {
+                    body: o,
+                },
+            };
+            groups.addMember(master);
+            o.team = -master.rememberedTeam;
+            o.on('dead', () => groups.removeMember(master));
+        }
     }
 };
 
