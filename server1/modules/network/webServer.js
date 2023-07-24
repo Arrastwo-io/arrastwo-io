@@ -46,16 +46,6 @@ let servers = [
         gameMode: c.gameModeName,
         players: views.length,
         ip: c.host
-    },
-    {
-        gameMode: "FFA",
-        players: 0,
-        ip: c.host.split(":")[0] + ":3001"
-    },
-    {
-        gameMode: "Siege",
-        players: 0,
-        ip: c.host.split(":")[0] + ":3002"
     }
 ];
 
@@ -85,8 +75,16 @@ function logMiddleware(req, res, next) {
 
     next();
 }
+function corsMiddleware(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+    next();
+}
 
 let _temp = new App(),
     _ws = new (require('ws').WebSocketServer)({ noServer: true });
+_temp.use(corsMiddleware);
 _temp.use(logMiddleware);
 _temp.start(_ws, c.port);

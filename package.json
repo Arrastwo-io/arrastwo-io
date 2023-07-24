@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "server/index.js",
   "scripts": {
-    "start": "node --optimize-for-size --no-lazy --gc_interval=120 server/index"
+    "start": "concurrently \"node --optimize-for-size --no-lazy --gc_interval=120 server/index\" \"node --optimize-for-size --no-lazy --gc_interval=120 server0/index\" \"node --optimize-for-size --no-lazy --gc_interval=120 server1/index\""
   },
   "dependencies": {
+    "concurrently": "^8.2.0",
+    "cors": "^2.8.5",
     "ws": "^8.13.0"
   },
   "engines": {
