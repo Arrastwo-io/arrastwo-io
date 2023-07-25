@@ -1664,6 +1664,7 @@ class Entity extends EventEmitter {
                 killers[0].team = -c.TEAMS;
                 killers[0].color = [10, 11, 12, 15, 25, 26, 27, 28][-killers[0].team - 1];
                 killers[0].skill.realSkillCap *= 2;
+                killers[0].skill.reset();
                 killers[0].setLevel(killers[0].skill.realSkillCap);
                 hunters[0] = killers[0];
             }

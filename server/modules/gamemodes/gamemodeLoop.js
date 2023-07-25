@@ -63,6 +63,7 @@ const gamemodeLoop = function() {
                 instance.team = -c.TEAMS;
                 instance.color = [10, 11, 12, 15, 25, 26, 27, 28][-instance.team - 1];
                 instance.skill.realSkillCap *= 2;
+                instance.skill.reset();
                 instance.setLevel(instance.skill.realSkillCap);
                 hunters[0] = instance;
             }
