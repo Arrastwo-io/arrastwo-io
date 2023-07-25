@@ -1,6 +1,6 @@
-const defaults = require("../../config.js");
+const defaults = require("../../../server/config.js");
 
-const gamemode = "FFA"; // keep it as ffa
+const gamemode = "Domination"; // keep it as ffa
 
 const gamemodes = {
     "FFA": {
@@ -593,6 +593,7 @@ const gamemodes = {
     },
 };
 
+defaults.port = defaults.port + Number(__dirname.split("server")[1].split("/")[0]);
 if (defaults.host == "localhost") defaults.host = "localhost:" + defaults.port;
 const mode = gamemodes[gamemode];
 

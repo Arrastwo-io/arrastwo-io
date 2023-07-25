@@ -37,7 +37,7 @@ const dreadStat = function (arr) {
     });
     return data;
 };
-let config = require("../config.js");
+let config = require("../../server/config.js");
 let skcnv = {
     atk: 6,
     spd: 4,
