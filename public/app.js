@@ -312,9 +312,16 @@ window.onload = async () => {
     servers.forEach(async (server) => {
         try {
             const tr = document.createElement("tr");
-            const td = document.createElement("td");
-            td.textContent = `${server.gameMode} | ${server.players} Players`;
-            td.onclick = () => {
+            const td1 = document.createElement("td");
+            td1.textContent = `${server.ip}`;
+            const td2 = document.createElement("td");
+            td2.textContent = `${server.gameMode}`;
+            const td3 = document.createElement("td");
+            td3.textContent = `${server.players}`;
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.onclick = () => {
                 if (myServer.classList.contains("selected")) {
                     myServer.classList.remove("selected");
                 }
@@ -323,14 +330,13 @@ window.onload = async () => {
                 window.serverAdd = server.ip;
                 getMockups();
             };
-            tr.appendChild(td);
             tbody.appendChild(tr);
             myServer = tr;
         } catch (e) {
             console.log(e);
         }
     });
-    if (Array.from(myServer.children)[0].onclick) Array.from(myServer.children)[0].onclick();
+    if (myServer.onclick) myServer.onclick();
     // Save forms
     util.retrieveFromLocalStorage("playerNameInput");
     util.retrieveFromLocalStorage("playerKeyInput");

@@ -1,6 +1,6 @@
 const defaults = require("../../../server/config.js");
 
-const gamemode = "Manhunt"; // keep it as ffa
+const gamemode = "Domination"; // keep it as ffa
 
 const gamemodes = {
     "FFA": {

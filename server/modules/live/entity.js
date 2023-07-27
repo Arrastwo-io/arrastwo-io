@@ -1569,12 +1569,10 @@ class Entity extends EventEmitter {
             // Now for each of the things that kill me...
             for (let i = 0; i < this.collisionArray.length; i++) {
                 let instance = this.collisionArray[i];
-                if (instance.type === 'wall' || !instance.damage) return;
+                if (instance.type === 'wall' || instance.damage <= 0) return;
                 if (instance.master.settings.acceptsScore) {
                     // If it's not food, give its master the score
-                    if (instance.master.type === "tank" || instance.master.type === "miniboss") {
-                        notJustFood = true;
-                    }
+                    if (instance.master.type === "tank" || instance.master.type === "miniboss") notJustFood = true;
                     instance.master.skill.score += jackpot;
                     killers.push(instance.master); // And keep track of who killed me
                 } else if (instance.settings.acceptsScore) {
@@ -1591,7 +1589,10 @@ class Entity extends EventEmitter {
                                 this.type == "miniboss" ? "bosses" :
                                 killers.length == 1 ? "solo" : "assists";
             for (let i = 0; i < killers.length; i++) {
-                killers[i].killCount[killCountType]++;
+                if (this.type == "tank" ||
+                    this.type == "miniboss" ||
+                    this.type == "food"
+                ) killers[i].killCount[killCountType]++;
                 this.killCount.killers.push(killers[i].index);
             }
             // Add the killers to our death message, also send them a message
@@ -1661,12 +1662,16 @@ class Entity extends EventEmitter {
             }
             this.setKillers(killers);
             if (hunters.length && killers.length && hunters[0].id == this.id) {
-                killers[0].team = -c.TEAMS;
-                killers[0].color = [10, 11, 12, 15, 25, 26, 27, 28][-killers[0].team - 1];
-                killers[0].skill.realSkillCap *= 2;
-                killers[0].skill.reset();
-                killers[0].setLevel(killers[0].skill.realSkillCap);
-                hunters[0] = killers[0];
+                killers.forEach((killer, index) => {
+                    if (killer.team == -1) {
+                        killers[index].team = -c.TEAMS;
+                        killers[index].color = [10, 11, 12, 15, 25, 26, 27, 28][-killers[index].team - 1];
+                        killers[index].skill.realSkillCap *= 2;
+                        killers[index].skill.reset();
+                        killers[index].setLevel(killers[index].skill.realSkillCap);
+                        hunters[0] = killers[index];
+                    }
+                });
             }
             // Kill it
             return 1;

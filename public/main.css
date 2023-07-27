@@ -175,7 +175,7 @@ div {
 
 .serverSelector {
     height: 60px;
-    text-align: center;
+    /* text-align: center; */
     font-size: 13px;
     font-weight: bold;
     line-height: 10px;

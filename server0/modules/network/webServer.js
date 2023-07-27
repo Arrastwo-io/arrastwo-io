@@ -44,7 +44,7 @@ class App {
 let servers = [
     {
         gameMode: c.gameModeName,
-        players: views.length,
+        players: 0,
         ip: c.host
     }
 ];
@@ -56,6 +56,9 @@ function logMiddleware(req, res, next) {
             resStr = mockupJsonData;
             break;
         case "/serverData.json":
+            servers.forEach((server, index) => {
+                servers[index].players = clients.length;
+            })
             resStr = JSON.stringify(servers);
             break;
         default:
@@ -76,7 +79,7 @@ function logMiddleware(req, res, next) {
     next();
 }
 function corsMiddleware(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', c.host)
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
