@@ -18,15 +18,15 @@ class BossRush {
 
     generateWaves() {
         let bosses = c.secondaryGameMode != "TheLine"
-            ? this.bossChoices.sort(() => 0.9 - Math.random())
-            : this.bigBossChoices.sort(() => 0.7 - Math.random());
+            ? this.bossChoices.sort(() => 0.5 - Math.random())
+            : this.bigBossChoices.sort(() => 0.5 - Math.random());
         let waves = []
         for (let i = 0; i < 200; i++) {
             let wave = []
             for (let j = 0; j < i + 1; j++) {
                 wave.push(bosses[j])
             }
-            bosses = bosses.sort(() => c.secondaryGameMode != "TheLine" ? 0.9 : 0.7 - Math.random())
+            bosses = bosses.sort(() => 0.5 - Math.random())
             waves.push(wave)
         }
         return waves
