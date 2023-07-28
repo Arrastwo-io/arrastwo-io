@@ -468,7 +468,7 @@ let makenpcs = () => {
         let o = new Entity(room.randomType("norm")),
             color = 17,
             team = o.id,
-            dread_bot = c.secondaryGameMode == "Manhunt" ? false : (ran.chooseChance(10, 1)
+            dread_bot = c.secondaryGameMode.includes("Manhunt") ? false : (ran.chooseChance(10, 1)
                     ? (dread_bots.length < (Math.round(c.BOTS / 6) + 1)
                             ? true
                             : false)

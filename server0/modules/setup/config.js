@@ -1,656 +1,156 @@
 const defaults = require("../../../server/config.js");
 
-const gamemode = "Growth FFA"; // keep it as ffa
+const gamemode = {
+    game: [
+        "TDM"
+    ],
+    mode: [
+        "Siege",
+        "Shiny",
+        "Growth"
+    ],
+    ROOM_SETUP: [
+        [ "norm", "norm", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
+        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
+        [ "norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm" ],
+        [ "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall" ],
+        [ "boss", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "boss" ],
+        [ "boss", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "boss" ],
+        [ "boss", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "boss" ],
+        [ "boss", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "boss" ],
+        [ "boss", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "boss" ],
+        [ "boss", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "boss" ],
+        [ "boss", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "boss" ],
+        [ "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall" ],
+        [ "norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm" ],
+        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
+        [ "norm", "norm", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ]
+    ],
+    X_GRID: 15,
+    Y_GRID: 15,
+}
 
-const gamemodes = {
-    "FFA": {
-        BOTS: 9
-    }, // "defaults" is already FFA.
+const modes = {
     "Manhunt": {
-        MODE: "tdm",
-        TEAMS: 2,
-        secondaryGameMode: "Manhunt",
-        MAZE: 30,
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
-            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
-            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ]
+        secondaryGameMode: "Manhunt"
     },
     "TrainWars": {
-        MODE: "tdm",
-        TEAMS: (Math.random() * 7 | 0) + 2,
         TRAIN: true,
         secondaryGameMode: "TrainWars"
     },
-    "TheLine": {
-        MODE: "tdm",
-        TEAMS: 1 + (Math.random() * 3 | 0),
-        secondaryGameMode: "TheLine",
-        X_GRID: 20,
-        Y_GRID: 20,
-        GROWTH: 90,
-        SHINY: true,
-        SPECIAL_BOSS_SPAWNS: true,
-        ROOM_SETUP: [
-            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
-            ["rock", "port", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "port", "rock"],
-            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
-            ["wall", "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall", "wall"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
-            ["wall", "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall", "wall"],
-            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
-            ["rock", "port", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "port", "rock"],
-            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
-        ]
-    },
     "Assault": {
-        MODE: "tdm",
-        TEAMS: 2,
         secondaryGameMode: "Assault",
-        X_GRID: 15,
-        Y_GRID: 15,
-        MAZE: 30,
-        DOMINATOR_LOOP: true,
-        ROOM_SETUP: [
-            ["bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-        ]
     },
     "Soccer": {
         SOCCER: true,
-        MODE: "tdm",
-        TEAMS: 2,
         secondaryGameMode: "Soccer",
-        ROOM_SETUP: [
-            ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-            ["wall", "wall", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "wall", "wall"],
-            ["wall", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "wall"],
-            ["wall", "norm", "norm", "norm", "norm", "roid", "rock", "norm", "norm", "norm", "norm", "wall"],
-            ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
-            ["bas1", "norm", "norm", "rock", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "bas2"],
-            ["bas1", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "rock", "norm", "norm", "bas2"],
-            ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
-            ["wall", "norm", "norm", "norm", "norm", "rock", "roid", "norm", "norm", "norm", "norm", "wall"],
-            ["wall", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "wall"],
-            ["wall", "wall", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "wall", "wall"],
-            ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"]
-        ]
     },
-    "Growth FFA": {
-        GROWTH: 90,
-        secondaryGameMode: "Growth",
-        X_GRID: 16,
-        Y_GRID: 16,
-        SKILL_CAP: 400,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ]
-    },
-    "Growth TDM": {
-        MODE: "tdm",
-        GROWTH: 90,
-        secondaryGameMode: "Growth",
-        TEAMS: 2 + (Math.random() * 3 | 0),
-        SKILL_CAP: 400,
-        X_GRID: 16,
-        Y_GRID: 16,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ]
-    },
-    "Open TDM": {
-        MODE: "tdm",
-        TEAMS: 2 + (Math.random() * 3 | 0)
-    },
-    "Portal FFA": {
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "rock", "port", "rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock", "port", "rock", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "roid", "rock", "rock", "rock", "roid", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "rock", "nest", "nest", "nest", "rock", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "rock", "roid", "norm", "norm", "rock", "nest", "port", "nest", "rock", "norm", "norm", "roid", "rock", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "rock", "nest", "nest", "nest", "rock", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "roid", "rock", "rock", "rock", "roid", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "rock", "port", "rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock", "port", "rock", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-        ]
-    },
-    "Groups": {
-        GROUPS: (Math.random() * 3 | 0) + 2,
-        secondaryGameMode: "Squads"
-    },
-    "Maze Groups": {
-        GROUPS: (Math.random() * 3 | 0) + 2,
-        MAZE: 32,
-        X_GRID: 16,
-        Y_GRID: 16,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ],
-        secondaryGameMode: "Squads"
-    },
-    "Maze": {
-        MAZE: 32,
-        X_GRID: 16,
-        Y_GRID: 16,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ],
-        secondaryGameMode: "Maze"
-    },
-    "Labyrinth": {
-        X_GRID: 18,
-        Y_GRID: 18,
-        MAZE: 36,
+    "Shiny": {
         SHINY: true,
-        TEAMS: Math.random() * 5 | 0,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ],
-        secondaryGameMode: "Maze"
     },
-    "Portal Maze": {
-        X_GRID: 15,
-        Y_GRID: 15,
-        MAZE: 30,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "port", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "port", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "port", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "port", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "port", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-        ],
-        secondaryGameMode: "Maze"
+    "Growth": {
+        GROWTH: 90,
+        secondaryGameMode: "Growth",
+        SKILL_CAP: 400,
     },
-    "Maze 2TDM": {
-        MAZE: 32,
-        X_GRID: 16,
-        Y_GRID: 16,
-        MODE: "tdm",
-        TEAMS: 2,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "bap1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bas2", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bap2", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ],
-        secondaryGameMode: "Maze"
-    },
-    "Maze 4TDM": {
-        MAZE: 32,
-        X_GRID: 16,
-        Y_GRID: 16,
-        MODE: "tdm",
-        TEAMS: 4,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "bap1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas4", "bap4", "norm"],
-            ["norm", "bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas4", "bas4", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "bas3", "bas3", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bas2", "norm"],
-            ["norm", "bap3", "bas3", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bap2", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
-        ],
-        secondaryGameMode: "Maze"
-    },
-    "2TDM": {
-        MODE: "tdm",
-        TEAMS: 2,
-        ROOM_SETUP: [
-            ["bas1", "rock", "norm", "norm", "norm", "roid", "roid", "norm", "norm", "norm", "rock", "bas2"],
-            ["bap1", "rock", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "rock", "bap2"],
-            ["bas1", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "bas2"],
-            ["bas1", "norm", "norm", "norm", "norm", "roid", "rock", "norm", "norm", "norm", "norm", "bas2"],
-            ["bap1", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "bap2"],
-            ["bas1", "norm", "norm", "rock", "nest", "nest", "nest", "nest", "roid", "norm", "norm", "bas2"],
-            ["bas1", "norm", "norm", "roid", "nest", "nest", "nest", "nest", "rock", "norm", "norm", "bas2"],
-            ["bap1", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "bap2"],
-            ["bas1", "norm", "norm", "norm", "norm", "rock", "roid", "norm", "norm", "norm", "norm", "bas2"],
-            ["bas1", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "bas2"],
-            ["bap1", "rock", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "rock", "bap2"],
-            ["bas1", "rock", "norm", "norm", "norm", "roid", "roid", "norm", "norm", "norm", "rock", "bas2"]
-        ]
-    },
-    "4TDM": {
-        MODE: "tdm",
-        TEAMS: 4,
-        ROOM_SETUP: [
-            ["bas1", "bas1", "norm", "norm", "norm", "roid", "roid", "norm", "norm", "norm", "bas3", "bas3"],
-            ["bas1", "bap1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bap3", "bas3"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "roid", "nest", "nest", "norm", "roid", "norm", "norm", "norm"],
-            ["roid", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "roid"],
-            ["roid", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "roid"],
-            ["norm", "norm", "norm", "norm", "roid", "nest", "nest", "norm", "roid", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["bas4", "bap4", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bap2", "bas2"],
-            ["bas4", "bas4", "norm", "norm", "norm", "roid", "roid", "norm", "norm", "norm", "bas2", "bas2"]
-        ]
-    },
-    "8TDM": {
-        MODE: "tdm",
-        TEAMS: 8,
-        ROOM_SETUP: [
-            ["bas1", "bap1", "norm", "norm", "norm", "bap5", "bap5", "norm", "norm", "norm", "bap3", "bas3"],
-            ["bap1", "bas1", "norm", "norm", "norm", "bas5", "bas5", "norm", "norm", "norm", "bas3", "bap3"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "roid", "nest", "nest", "norm", "roid", "norm", "norm", "norm"],
-            ["bap8", "bas8", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "bas6", "bap6"],
-            ["bap8", "bas8", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "bas6", "bap6"],
-            ["norm", "norm", "norm", "norm", "roid", "nest", "nest", "norm", "roid", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
-            ["bap4", "bas4", "norm", "norm", "norm", "bas7", "bas7", "norm", "norm", "norm", "bas2", "bap2"],
-            ["bas4", "bap4", "norm", "norm", "norm", "bap7", "bap7", "norm", "norm", "norm", "bap2", "bas2"]
-        ]
+    "Space": {
+        ARENA_TYPE: "circle",
+        SPACE_MODE: true,
+        secondaryGameMode: "Space"
     },
     "Siege": {
-        MODE: "tdm",
-        TEAMS: 1,
         SPECIAL_BOSS_SPAWNS: true,
-        X_GRID: 19,
-        Y_GRID: 19,
-        ROOM_SETUP: [
-            ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "wall", "wall", "wall", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "boss", "boss", "boss", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "boss", "boss", "boss", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "outb", "wall", "wall", "wall", "wall", "boss", "boss", "boss", "wall", "wall", "wall", "wall", "outb", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "wall", "wall", "norm", "norm", "wall", "norm", "norm", "norm", "wall", "norm", "norm", "wall", "wall", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "wall", "norm", "norm", "bas1", "norm", "norm", "norm", "norm", "norm", "bas1", "norm", "norm", "wall", "outb", "outb", "outb"],
-            ["wall", "wall", "wall", "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall", "wall", "wall", "wall"],
-            ["wall", "boss", "boss", "boss", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "boss", "boss", "boss", "wall"],
-            ["wall", "boss", "boss", "boss", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "boss", "boss", "boss", "wall"],
-            ["wall", "boss", "boss", "boss", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "boss", "boss", "boss", "wall"],
-            ["wall", "wall", "wall", "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall", "wall", "wall", "wall"],
-            ["outb", "outb", "outb", "wall", "norm", "norm", "bas1", "norm", "norm", "norm", "norm", "norm", "bas1", "norm", "norm", "wall", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "wall", "wall", "norm", "norm", "wall", "norm", "norm", "norm", "wall", "norm", "norm", "wall", "wall", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "outb", "wall", "wall", "wall", "wall", "boss", "boss", "boss", "wall", "wall", "wall", "wall", "outb", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "boss", "boss", "boss", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "boss", "boss", "boss", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
-            ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "wall", "wall", "wall", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
-        ],
         secondaryGameMode: "Boss Rush"
     },
     "Mothership": {
-        MODE: "tdm",
-        TEAMS: (Math.random() * 3 | 0) + 2,
-        MOTHERSHIP_LOOP: true,
-        secondaryGameMode: "Mothership"
-    },
-    "Portal Mothership": {
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "rock", "port", "rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock", "port", "rock", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "roid", "rock", "rock", "rock", "roid", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "rock", "nest", "nest", "nest", "rock", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "rock", "roid", "norm", "norm", "rock", "nest", "port", "nest", "rock", "norm", "norm", "roid", "rock", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "rock", "nest", "nest", "nest", "rock", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "roid", "rock", "rock", "rock", "roid", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "rock", "port", "rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock", "port", "rock", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-        ],
-        MODE: "tdm",
-        TEAMS: (Math.random() * 3 | 0) + 2,
         MOTHERSHIP_LOOP: true,
         secondaryGameMode: "Mothership"
     },
     "Tag": {
-        MODE: "tdm",
-        TEAMS: (Math.random() * 3 | 0) + 2,
-        TAG: true,
-        secondaryGameMode: "Tag"
-    },
-    "Portal Tag": {
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "rock", "port", "rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock", "port", "rock", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "roid", "rock", "rock", "rock", "roid", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "rock", "nest", "nest", "nest", "rock", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "rock", "roid", "norm", "norm", "rock", "nest", "port", "nest", "rock", "norm", "norm", "roid", "rock", "norm"],
-            ["norm", "rock", "norm", "norm", "norm", "rock", "nest", "nest", "nest", "rock", "norm", "norm", "norm", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "roid", "rock", "rock", "rock", "roid", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "rock", "port", "rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock", "port", "rock", "norm"],
-            ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-        ],
-        MODE: "tdm",
-        TEAMS: (Math.random() * 3 | 0) + 2,
         TAG: true,
         secondaryGameMode: "Tag"
     },
     "Domination": {
-        MODE: "tdm",
-        TEAMS: (Math.random() * 3 | 0) + 2,
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"],
-            ["rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "dom0", "norm", "norm", "norm", "nest", "dom0", "nest", "norm", "norm", "norm", "dom0", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock"],
-            ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"]
-        ],
         DOMINATOR_LOOP: true,
         secondaryGameMode: "Domination"
-    },
-    "Portal Domination": {
+    }
+};
+
+const games = {
+    "FFA": {
+        BOTS: 9
+    }, // "defaults" is already FFA.
+    "TDM": {
         MODE: "tdm",
-        TEAMS: (Math.random() * 3 | 0) + 2,
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"],
-            ["rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock"],
-            ["norm", "norm", "port", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "port", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "dom0", "norm", "norm", "norm", "nest", "dom0", "nest", "norm", "norm", "norm", "dom0", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "port", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "port", "norm", "norm"],
-            ["rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock"],
-            ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"]
-        ],
-        DOMINATOR_LOOP: true,
-        secondaryGameMode: "Domination"
+        TEAMS: 2 + (Math.random() * 3 | 0)
     },
-    "2TDM Domination": {
+    "Groups": {
+        GROUPS: 2 + (Math.random() * 3 | 0),
+        secondaryGameMode: "Squads"
+    },
+    "Maze": {
+        MAZE: 30,
+        secondaryGameMode: "Maze"
+    },
+    "1TDM": {
+        MODE: "tdm",
+        TEAMS: 1,
+    },
+    "2TDM": {
         MODE: "tdm",
         TEAMS: 2,
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["bas1", "bap1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "dom0", "norm", "norm", "norm", "nest", "dom0", "nest", "norm", "norm", "norm", "dom0", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bap2", "bas2"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bas2"]
-        ],
-        DOMINATOR_LOOP: true,
-        secondaryGameMode: "Domination"
     },
-    "4TDM Domination": {
+    "4TDM": {
         MODE: "tdm",
         TEAMS: 4,
-        X_GRID: 15,
-        Y_GRID: 15,
-        ROOM_SETUP: [
-            ["bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas3", "bas3"],
-            ["bas1", "bap1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bap3", "bas3"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "dom0", "norm", "norm", "norm", "nest", "dom0", "nest", "norm", "norm", "norm", "dom0", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["bas4", "bap4", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bap2", "bas2"],
-            ["bas4", "bas4", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bas2"]
-        ],
-        DOMINATOR_LOOP: true,
-        secondaryGameMode: "Domination"
     },
-    "Space": {
+    "8TDM": {
         MODE: "tdm",
-        TEAMS: 3,
-        ARENA_TYPE: "circle",
-        SPACE_MODE: true,
-        X_GRID: 9,
-        Y_GRID: 9,
-        ROOM_SETUP: [
-            ["rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock"],
-            ["norm", "norm", "norm", "norm", "rock", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["roid", "rock", "norm", "norm", "nest", "norm", "norm", "rock", "roid"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "rock", "norm", "norm", "norm", "norm"],
-            ["rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock"]
-        ],
-        secondaryGameMode: "Space"
-    },
-    "Space 4TDM": {
-        MODE: "tdm",
-        TEAMS: 4,
-        ARENA_TYPE: "circle",
-        SPACE_MODE: true,
-        X_GRID: 9,
-        Y_GRID: 9,
-        ROOM_SETUP: [
-            ["rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock"],
-            ["norm", "norm", "norm", "norm", "bas1", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["roid", "bas2", "norm", "norm", "nest", "norm", "norm", "bas4", "roid"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-            ["norm", "norm", "norm", "norm", "bas3", "norm", "norm", "norm", "norm"],
-            ["rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock"]
-        ],
-        secondaryGameMode: "Space"
-    },
+        TEAMS: 8,
+    }
 };
 
 defaults.port = defaults.port + Number(__dirname.split("server")[1].split("/")[0]);
 if (defaults.host == "localhost") defaults.host = "localhost:" + defaults.port;
-const mode = gamemodes[gamemode];
 
 let output = {};
-for (let key in defaults) {
-    output[key] = !defaults.BOTS_USE_DEFAULT && key == "BOTS" ? (mode.MODE == "tdm" ? 18 : 9) : defaults[key];
-    if (mode[key]) {
-        output[key] = mode[key];
-    }
+output.secondaryGameMode = "";
+let modeNames = () => {
+    let name = "";
+    gamemode.game.forEach((mod, index) => {
+        if (mod.includes("TDM") && output.TEAMS != 1) { name = name + output.TEAMS + " " + mod; }
+        else { name += mod; }
+        if (index != (gamemode.game.length - 1)) name += " ";
+    });
+    return name;
 }
+for (let key in defaults) {
+    output[key] = !defaults.BOTS_USE_DEFAULT && key == "BOTS" ? (output.gameModeName.includes("TDM") ? 16 : 10) : defaults[key];
+    gamemode.game.forEach((gam) => {
+        if (games[gam][key]) {
+            if (key != "secondaryGameMode") { output[key] = games[gam][key]; }
+            else {
+                output.secondaryGameMode += " ";
+                output.secondaryGameMode += games[gam][key]
+            }
+        }
+    });
+    gamemode.mode.forEach((mod) => {
+        if (modes[mod][key]) {
+            if (key != "secondaryGameMode") { output[key] = modes[mod][key]; }
+            else {
+                output.secondaryGameMode += " ";
+                output.secondaryGameMode += modes[mod][key];
+            }
+        }
+    });
+}
+
+output.X_GRID = gamemode.X_GRID;
+output.Y_GRID = gamemode.Y_GRID;
 output.WIDTH = output.X_GRID * 400;
 output.HEIGHT = output.Y_GRID * 400;
-
-output.gameModeName = gamemode;
-if (["Tag", "Domination", "Mothership"].includes(gamemode)) output.gameModeName = `${output.TEAMS} TDM ${gamemode}`;
-if (gamemode === "Open TDM") output.gameModeName = `Open ${output.TEAMS} TDM`;
+output.ROOM_SETUP = gamemode.ROOM_SETUP;
+output.gameModeName = modeNames();
 
 module.exports = { output };

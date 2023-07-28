@@ -22,23 +22,23 @@ global.mockupsLoaded = false;
 global.nextTagBotTeam = null;
 global.getTeam = function getTeam(type = 0) { // 0 - Bots only, 1 - Players only, 2 - all
     const teamData = {};
-    for (let i = 0; i < (c.TEAMS - (c.secondaryGameMode == "Manhunt" ? 1 : 0)); i++) teamData[i + 1] = 0;
+    for (let i = 0; i < (c.TEAMS - (c.secondaryGameMode.includes("Manhunt") ? 1 : 0)); i++) teamData[i + 1] = 0;
     if (type !== 1) {
         for (const o of entities) {
-            if (o.isBot && -o.team > 0 && -o.team <= (c.TEAMS - (c.secondaryGameMode == "Manhunt" ? 1 : 0))) {
+            if (o.isBot && -o.team > 0 && -o.team <= (c.TEAMS - (c.secondaryGameMode.includes("Manhunt") ? 1 : 0))) {
                 teamData[-o.team]++;
             }
         }
     }
     if (type !== 0) {
         for (let { socket } of sockets.players) {
-            if (socket.rememberedTeam > 0 && socket.rememberedTeam <= (c.TEAMS - (c.secondaryGameMode == "Manhunt" ? 1 : 0))) {
+            if (socket.rememberedTeam > 0 && socket.rememberedTeam <= (c.TEAMS - (c.secondaryGameMode.includes("Manhunt") ? 1 : 0))) {
                 teamData[socket.rememberedTeam]++;
             }
         }
     }
     const toSort = Object.entries(teamData).filter(entry => !global.defeatedTeams.includes(-entry[0])).sort((a, b) => a[1] - b[1]);
-    return toSort.length === 0 ? ((Math.random() * (c.TEAMS - (c.secondaryGameMode == "Manhunt" ? 1 : 0)) | 0) + 1) : toSort[0][0];
+    return toSort.length === 0 ? ((Math.random() * (c.TEAMS - (c.secondaryGameMode.includes("Manhunt") ? 1 : 0)) | 0) + 1) : toSort[0][0];
 }
 
 global.loopThrough = function(array, callback = () => {}) {

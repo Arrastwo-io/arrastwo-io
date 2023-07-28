@@ -57,7 +57,7 @@ const gamemodeLoop = function() {
     if (c.DOMINATOR_LOOP) dominatorLoop.tally();
     if (c.SPECIAL_BOSS_SPAWNS) bossRush.loop();
     if (c.SOCCER) ballLoop.loop();
-    if (c.secondaryGameMode == "Manhunt") {
+    if (c.secondaryGameMode.includes("Manhunt")) {
         loopThrough(entities.filter(r => r.isPlayer || r.isBot), function (instance) {
             if (hunters.length < 1 && instance.team == -1) {
                 instance.team = -c.TEAMS;

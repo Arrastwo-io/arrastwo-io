@@ -51,7 +51,7 @@ let skcnv = {
     hlt: 7,
 };
 const defineSkillCap = c.SKILL_CAP;
-const genericSkillCap = c.secondaryGameMode == "Growth" ? c.SKILL_CAP : c.SKILL_CHEAT_CAP;
+const genericSkillCap = c.secondaryGameMode.includes("Growth") ? c.SKILL_CAP : c.SKILL_CHEAT_CAP;
 const skillSet = (args) => {
     let skills = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let s in args) {
@@ -18459,7 +18459,7 @@ c.SPECIAL_BOSS_SPAWNS
     ? exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.healer, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper]
     : exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
         exports.basic.UPGRADES_TIER_2 = [exports.smasher];
-                c.TRAIN || c.secondaryGameMode == "Manhunt" ? exports.basic.UPGRADES_TIER_3 = [exports.single] : exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought, exports.dreadnoughtHealer];
+                c.TRAIN || c.secondaryGameMode.includes("Manhunt") ? exports.basic.UPGRADES_TIER_3 = [exports.single] : exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought, exports.dreadnoughtHealer];
                 exports.smasher.UPGRADES_TIER_3 = [exports.megaSmasher, exports.spike, exports.autoSmasher, exports.landmine];
 
         exports.twin.UPGRADES_TIER_2 = [exports.doubleTwin, exports.tripleShot, exports.gunner, exports.hexaTank];
