@@ -87,12 +87,6 @@ function collide(collision) {
         } else {
             portal.SIZE += 0.02;
         }
-    } else if (instance.healer || other.healer) {
-        advancedcollide(instance, other, true, true, false,
-            instance.team === other.team &&
-            instance.master.id != other.id &&
-            other.master.id != instance.id &&
-            (instance.type == "tank" || instance.type == "miniboss" || other.type == "tank" || other.type == "miniboss"));
     } else if (!disconnections.filter(dis => dis.body.id == instance.id || dis.body.id == other.id).length) {
         switch (true) {
             case instance.type === "wall" || other.type === "wall":
@@ -133,7 +127,11 @@ function collide(collision) {
                 (other.type === "crasher" && instance.type === "food"):
                 firmcollide(instance, other);
                 break;
-            case instance.team !== other.team:
+            case instance.team !== other.team ||
+                (
+                    instance.team == other.team &&
+                    (instance.healer || other.healer)
+                ):
                 advancedcollide(instance, other, true, true);
                 break;
             case instance.settings.hitsOwnType == "never" ||

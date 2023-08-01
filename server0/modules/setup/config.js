@@ -116,12 +116,13 @@ output.secondaryGameMode = "";
 let modeNames = () => {
     let name = "";
     gamemode.game.forEach((mod, index) => {
-        if (mod = "TDM" && output.TEAMS != 1) { name = name + output.TEAMS + " " + mod; }
+        if (mod == "TDM" && games[mod].TEAMS != 1) { name = name + games[mod].TEAMS + "TDM"; }
         else { name += mod; }
         if (index != (gamemode.game.length - 1)) name += " ";
     });
     return name;
 }
+output.gameModeName = modeNames();
 for (let key in defaults) {
     output[key] = !defaults.BOTS_USE_DEFAULT && key == "BOTS" ? (output.gameModeName.includes("TDM") ? 16 : 10) : defaults[key];
     gamemode.game.forEach((gam) => {
@@ -149,6 +150,5 @@ output.Y_GRID = gamemode.Y_GRID;
 output.WIDTH = output.X_GRID * 400;
 output.HEIGHT = output.Y_GRID * 400;
 output.ROOM_SETUP = gamemode.ROOM_SETUP;
-output.gameModeName = modeNames();
 
 module.exports = { output };

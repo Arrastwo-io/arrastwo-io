@@ -48,7 +48,7 @@ module.exports = {
     SKILL_BOOST: 5,
     // Use defaults?
     BOTS_USE_DEFAULT: true,
-    BOTS: 14,
+    BOTS: 0,
     GLASS_HEALTH_FACTOR: 2,
     HALF: false,
     TRAIN: false,

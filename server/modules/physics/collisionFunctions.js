@@ -69,7 +69,7 @@ function reflectcollide(wall, bounce) {
     return 0;
 }
 
-function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false, healer = true) {
+function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
     // Prepare to check
     let tock = Math.min(my.stepRemaining, n.stepRemaining),
         combinedRadius = n.size + my.size,
@@ -233,13 +233,17 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false, h
                     reductionFactor = Math.min(deathFactor._me, deathFactor._n);
                     // Now apply it
                     my.damageRecieved += damage._n * deathFactor._n > 0
-                        ? damage._n * deathFactor._n
-                        : (n.healer && healer
+                        ? (my.team != n.team
+                            ? damage._n * deathFactor._n
+                            : 0)
+                        : (n.healer && n.team == my.team && my.type == "tank" && n.master.id != my.id
                             ? damage._n * deathFactor._n
                             : 0);
                     n.damageRecieved += damage._me * deathFactor._me > 0
-                        ? damage._me * deathFactor._me
-                        : (my.healer && healer
+                        ? (my.team != n.team
+                            ? damage._me * deathFactor._me
+                            : 0)
+                        : (my.healer && my.team == n.team && n.type == "tank" && my.master.id != n.id
                             ? damage._me * deathFactor._me
                             : 0);
                 }
