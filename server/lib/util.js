@@ -1,7 +1,7 @@
 /* jslint node: true */
 ("use strict")
 
-let cfg = require("../config.js")
+let lastMsg;
 
 exports.addArticle = string => {
   let article = /^[aeiou]/i.test(string) ? 'an' : 'a'
@@ -79,7 +79,12 @@ exports.time = () => Date.now() - exports.serverStartTime
 // create a custom timestamp format for log statements
 exports.log = text => console.log("[" + (exports.time() / 1000).toFixed(3) + "]: " + text)
 
-exports.warn = text => console.log("[" + (exports.time() / 1000).toFixed(3) + "]: " + "[WARNING] " + text)
+exports.warn = text => {
+  if (lastMsg != text) {
+    console.log("[" + (exports.time() / 1000).toFixed(3) + "]: " + "[WARNING] " + text);
+    lastMsg = text;
+  }
+}
 
 exports.error = text => console.log(text)
 

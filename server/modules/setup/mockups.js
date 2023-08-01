@@ -1,6 +1,7 @@
 function rounder(val) {
-    if (Math.abs(val) < 0.00001) val = 0;
-    return +val.toPrecision(6);
+    let num = Number(val);
+    if (Math.abs(num) < 0.00001) num = 0;
+    return +num.toPrecision(6);
 }
 // Define mocking up functions
 function getMockup(e, positionInfo) {
@@ -30,6 +31,7 @@ function getMockup(e, positionInfo) {
                 aspect: rounder(gun.aspect),
                 angle: rounder(gun.angle),
                 color: rounder(gun.color),
+                alpha: rounder(gun.alpha)
             };
         }),
         turrets: e.turrets.map(function(t) {

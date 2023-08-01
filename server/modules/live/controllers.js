@@ -256,32 +256,6 @@ class io_goToMasterTarget extends IO {
         }
     }
 }
-class io_moveMoon extends IO {
-    constructor(body) {
-        super(body)
-        this.myGoal = {
-            x: room.width / 2,
-            y: room.height / 2,
-        }
-        this.countdown = 2
-    }
-    think() {
-        if (this.countdown > 1 && this.body.label != "Spectator") {
-            this.countdown = 0;
-            if (this.body.label != "Moon") {
-                this.myGoal.x = room.blackHoles[0].x;
-                this.myGoal.y = room.blackHoles[0].y;
-            }
-            return {
-                goal: {
-                    x: this.myGoal.x,
-                    y: this.myGoal.y,
-                },
-                power: 0.2,
-            }
-        } else { this.countdown += 1; }
-    }
-}
 class io_canRepel extends IO {
     constructor(b) {
         super(b)
@@ -763,7 +737,6 @@ let ioTypes = {
     alwaysFire: io_alwaysFire,
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
-    moveMoon: io_moveMoon,
 
     //aiming related
     nearestDifferentMaster: io_nearestDifferentMaster,

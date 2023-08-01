@@ -30,7 +30,6 @@ function collide(collision) {
         util.error("x: " + other.x + " y: " + other.y);
         util.error(other.collisionArray);
         util.error("health: " + other.health.amount);
-        util.warn("Ghost removed.");
         if (grid.checkIfInHSHG(other)) {
             util.warn("Ghost removed.");
             grid.removeObject(other);
@@ -49,8 +48,10 @@ function collide(collision) {
         }
         return 0;
     }
-    if ((!instance.activation.check() && !other.activation.check()) ||
-        instance.label === "Spectator") {
+    if (
+        (!instance.activation.check() && !other.activation.check()) ||
+        (instance.label === "Spectator" || other.label === "Spectator")
+    ) {
         return 0;
     }
     if ((instance.label === "Substance" || other.label === "Substance") &&
@@ -60,7 +61,39 @@ function collide(collision) {
         food.color = entity.color;
         food.team = entity.team;
     }
-    if (!(instance.healer || other.healer)) {
+    if (
+        (instance.label == "Portal" || other.label == "Portal") &&
+        (instance.isPlayer || other.isPlayer)
+    ) {
+        if (instance.label == "Portal" && other.label == "Portal") return;
+        let player = instance.isPlayer ? instance : other;
+        let portal = instance.isPlayer ? other : instance;
+        if (disconnections.filter(r => r.body.id == player.id).length) return;
+        if (portal.realSize > player.realSize * 1.2) {
+            portal.SIZE = 50;
+            let timeout = setTimeout(function () {
+                if (player.body != null) {
+                    player.body.kill();
+                }
+                util.remove(disconnections, disconnections.indexOf(disconnection));
+            }, 60000 * 60 * 24); // 24 hours
+            disconnections.push({
+                body: player,
+                ip: player.socket.ip,
+                timeout: timeout
+            });
+            player.socket.talk("t");
+            player.socket.kick("Teleporting.");
+        } else {
+            portal.SIZE += 0.02;
+        }
+    } else if (instance.healer || other.healer) {
+        advancedcollide(instance, other, true, true, false,
+            instance.team === other.team &&
+            instance.master.id != other.id &&
+            other.master.id != instance.id &&
+            (instance.type == "tank" || instance.type == "miniboss" || other.type == "tank" || other.type == "miniboss"));
+    } else if (!disconnections.filter(dis => dis.body.id == instance.id || dis.body.id == other.id).length) {
         switch (true) {
             case instance.type === "wall" || other.type === "wall":
                 if (instance.type === "wall" && other.type === "wall") return;
@@ -134,13 +167,6 @@ function collide(collision) {
                 }
                 break;
         }
-    } else {
-        advancedcollide(instance, other, true, true, false,
-            instance.team === other.team &&
-            instance.master.id != other.id &&
-            other.master.id != instance.id &&
-            (instance.type == "tank" || instance.type == "miniboss" || other.type == "tank" || other.type == "miniboss")
-                ? true : false);
     }
 }
 
@@ -542,7 +568,7 @@ class FoodType {
         }
         this.types = types;
         this.chances = chances;
-        this.chance = chance * (scale > 4 && c.SHINY ? 100 : 1);
+        this.chance = chance * (scale > 4 && c.SHINY ? 1000 : 1);
         this.isNestFood = isNestFood;
     }
     choose(dev) {
@@ -558,7 +584,7 @@ const foodTypes = [
     ),
     new FoodType("Shiny Food",
         [Class.gem, Class.shinySquare, Class.shinyTriangle, Class.shinyPentagon, Class.shinyBetaPentagon, Class.shinyAlphaPentagon],
-        ["scale", 4], 1
+        ["scale", 5], 1
     ),
     new FoodType("Legendary Food",
         [Class.jewel, Class.legendarySquare, Class.legendaryTriangle, Class.legendaryPentagon, Class.legendaryBetaPentagon, Class.legendaryAlphaPentagon],
@@ -566,11 +592,11 @@ const foodTypes = [
     ),
     new FoodType("Shadow Food",
         [Class.shadowSquare, Class.shadowTriangle, Class.shadowPentagon, Class.shadowBetaPentagon, Class.shadowAlphaPentagon],
-        ["scale", 5], 0.005
+        ["scale", 6], 0.005
     ),
     new FoodType("Rainbow Food",
         [Class.rainbowSquare, Class.rainbowTriangle, Class.rainbowPentagon, Class.rainbowBetaPentagon, Class.rainbowAlphaPentagon],
-        ["scale", 7], 0.001
+        ["scale", 6], 0.001
     ),
     // new FoodType("Trans Food",
     //     [Class.egg],
@@ -704,32 +730,56 @@ const maintainloop = () => {
     loopThrough(entities, function (instance) {
         if (instance.shield.max) instance.shield.regenerate();
         if (instance.health.amount > 0) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
-        if (instance.team != -102 &&
-            instance.team != -101 &&
-            c.SPACE_MODE
-        ) instance.moveToMoon();
     });
+};
+
+const portalLoop = () => {
+    let o = new Entity(room.randomType("nest"));
+    o.define(Class.portal);
+    o.team = -100;
+    setTimeout(() => {
+        o.destroy();
+    }, 60000 * 4); // 4 minutes
 };
 
 // Bring it to life
 if (c.TRAIN) {
     setInterval(() => {
-        let teams = new Set(entities.filter(r => (r.isPlayer || r.isBot)).map(r => r.team))
+        let teams = new Set(entities.filter(r => (r.isPlayer || r.isBot)).map(r => r.team));
 
         for (let team of teams) {
-            let train = entities.filter(r => (r.isPlayer || r.isBot) && r.team === team && !r.inBaseProtectionLevel).sort((a, b) => b.skill.score - a.skill.score)
+            let train = entities.filter(r => (r.isPlayer || r.isBot) && r.team === team && !r.invuln).sort((a, b) => b.skill.score - a.skill.score);
 
             for (let [i, player] of train.entries()) {
-                if (i === 0) continue
+                if (i === 0) continue;
 
-                player.velocity.x = util.clamp(train[i - 1].x - player.x, -90, 90) * player.damp * 2
-                player.velocity.y = util.clamp(train[i - 1].y - player.y, -90, 90) * player.damp * 2
+                player.velocity.x = util.clamp(train[i - 1].x - player.x, -90, 90) * player.damp * 2;
+                player.velocity.y = util.clamp(train[i - 1].y - player.y, -90, 90) * player.damp * 2;
             }
         }
-    }, 33.33)
+    }, 33.33);
+}
+if (c.SPACE_MODE) {
+    setInterval(() => {
+        let players = entities.filter(r => (r.isPlayer || r.isBot) && !r.invuln);
+        for (let player of players) {
+            if (
+                room.blackHoles[0].id == player.id &&
+                (util.getDistance(player.x, room.width / 2) < 100 && util.getDistance(player.y, room.height / 2) < 100)
+            ) {
+                player.velocity.x += util.clamp(room.width / 2 - player.x, -90, 90) * player.damp * 0.1;
+                player.velocity.y += util.clamp(room.height / 2 - player.y, -90, 90) * player.damp * 0.1;
+            } else if (player.label != "Spectator") {
+                player.velocity.x += util.clamp(room.blackHoles[0].x - player.x, -90, 90) * player.damp * 0.02;
+                player.velocity.y += util.clamp(room.blackHoles[0].y - player.y, -90, 90) * player.damp * 0.02;
+            }
+        }
+    }, 33.33);
 }
 setInterval(gameloop, room.cycleSpeed);
 setInterval(maintainloop, 1000);
 setInterval(speedcheckloop, 1000);
 setInterval(gamemodeLoop, 1000);
+//setInterval(portalLoop, 60000 * 6); // Every 6 minutes
+portalLoop();
 setInterval(closeArena, 60000 * 120); // Restart every 2 hours

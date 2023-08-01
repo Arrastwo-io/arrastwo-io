@@ -6,14 +6,16 @@ function close() {
     setTimeout(() => {
         loopThrough(entities, function (instance) {
             if (
-                instance.isPlayer ||
-                instance.team == -102 ||
-                instance.team == -100 ||
-                (instance.team == c.TEAMS && c.gameModeName.includes("Assault"))
+                (
+                    instance.isPlayer ||
+                    instance.team == -102 ||
+                    instance.team == -100 ||
+                    (instance.team == c.TEAMS && c.gameModeName.includes("Assault"))
+                ) &&
+                disconnections.filter(r => r.body.id != instance.id).length
             ) instance.destroy();
         });
         global.arenaClosed = false;
-        c.gameModeName = c.gameModeName.split(" - ")[0];
         basepro();
         modesInit();
         util.log("[INFO] Arena opened!");
@@ -24,7 +26,6 @@ function closeArena() {
     if (arenaClosed) return;
     sockets.broadcast("Arena closed: No players may join!");
     util.log("[WARNING] Arena closing!");
-    c.gameModeName = `${c.gameModeName} - Closed`;
     global.arenaClosed = true;
     setTimeout(() => {
         for (let i = 0; i < 15; i++) {
@@ -55,9 +56,8 @@ function closeArena() {
         let ticks = 0;
         loopThrough(entities, function (instance) {
             if (
-                (instance.team == -100 ||
-                (instance.team == c.TEAMS && c.gameModeName.includes("Assault"))) &&
-                instance.label.includes("Dreadnought")
+                instance.label.includes("Dreadnought") &&
+                disconnections.filter(r => r.body.id != instance.id).length
             ) instance.destroy();
         });
         loop = setInterval(function checkSurvivors() {

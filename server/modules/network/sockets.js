@@ -1,8 +1,7 @@
 let permissionsDict = {}
     net = require('net'),
     clients = [],
-    players = [],
-    disconnections = [];
+    players = [];
 
 for (let entry of require("../../permissions.js")) {
     permissionsDict[entry.key] = entry;
@@ -22,10 +21,9 @@ function close(socket) {
             if (player.body.underControl) {
                 player.body.giveUp(player);
             }
-            if (player.body.invuln) {
-                player.body.invuln = false;
-                player.body.kill();
-            } else {
+            if (player.body.invuln) { player.body.kill(); }
+            else {
+                player.body.name = "[AFK] " + player.body.name;
                 let timeout = setTimeout(function () {
                     if (player.body != null) {
                         player.body.kill();
@@ -35,7 +33,7 @@ function close(socket) {
                 let disconnection = {
                     body: player.body,
                     ip: socket.ip,
-                    timeout: timeout,
+                    timeout: timeout
                 };
                 disconnections.push(disconnection);
             }
@@ -446,11 +444,11 @@ function incoming(message, socket) {
             }
             let body = player.body;
             if (body.underControl) {
-                body.giveUp(player, body.isDominator ? "" : undefined);
+                body.giveUp(player);
                 socket.talk(
                     "m",
                     body.isDominator
-                        ? "You are no longer controling dominaotr."
+                        ? "You are no longer controling the dominator."
                         : "You are no longer controling the mothership."
                 );
                 return 1;
@@ -800,10 +798,6 @@ let newgui = (player) => {
         publish: () => publish(gui),
     };
 };
-// Define the entities messaging function
-function messenger(socket, content) {
-    socket.talk("m", content);
-}
 
 // Make a function to spawn new players
 const spawn = (socket, name) => {
@@ -870,29 +864,28 @@ const spawn = (socket, name) => {
     socket.rememberedTeam = player.team;
     // Create and bind a body for the player host
     let body;
-    const filter = disconnections.filter(r => r.ip === socket.ip && r.body && !r.body.isDead());
+    const filter = disconnections.filter(r => r.ip == socket.ip && r.body && !r.body.isDead());
     if (filter.length) {
         let recover = filter[0];
         util.remove(disconnections, disconnections.indexOf(recover));
         clearTimeout(recover.timeout);
         body = recover.body;
-        body.become(player);
+        body.reset_func(false);
         player.team = -body.team;
     } else {
         body = new Entity(loc);
         body.protect();
         body.isPlayer = true;
         body.define(Class.basic); // Start as a basic tank
-        body.name = name; // Define the name
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
         }
-        body.addController(new ioTypes.listenToPlayer(body, { player })); // Make it listen
-        body.sendMessage = (content) => messenger(socket, content); // Make it speak
         socket.spectateEntity = null;
         body.invuln = true; // Make it safe
     }
+    body.name = name; // Define the name
+    body.become(player);
     player.body = body;
     body.socket = socket;
     // Decide how to color and team the body
@@ -1534,11 +1527,11 @@ const sockets = {
             util.log("[ERROR]:");
             util.error(e);
         });
-        
+
         //account for proxies
         socket.ip = req.headers['fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
                     req.headers['forwarded']        || req.headers['x-real-ip']       || req.connection.remoteAddress;
-        socket.ip = socket.ip.split(",")[0];
+        //socket.ip = socket.ip.split(",")[0];
         if (!net.isIP(socket.ip)) return socket.kick("Invalid IP: " + socket.ip);
         // Log it
         clients.push(socket);

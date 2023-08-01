@@ -1065,7 +1065,6 @@ exports.cubes = {
 exports.moon = {
     PARENT: [exports.food],
     LABEL: "Moon",
-    CONTROLLERS: ["moveMoon"],
     FOOD: {
         LEVEL: 6,
     },
@@ -15505,7 +15504,7 @@ exports.levels = {
     PARENT: [exports.testbedBase],
     REALSKILL_CAP: defineSkillCap,
     LABEL: "Levels",
-    UPGRADES_TIER_0: [exports.developer]
+    UPGRADES_TIER_0: [exports.developer, exports.basic]
 };
 for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) {
     let LEVEL = i;
@@ -18370,7 +18369,6 @@ exports.Celestialeternal = {
     PARENT: [exports.celestial],
     LABEL: 'Eternal',
     SKILL: [0,9,9,9,9,9,9,9,9,9],
-    NAME: "Kronos",
     SHAPE: 12,
     VALUE: 5000000,
     COLOR: 6,
@@ -18387,34 +18385,34 @@ exports.Celestialeternal = {
     TURRETS: [{
         /*********  SIZE     X       Y     ANGLE    ARC */
         POSITION: [  5.7,     9,      0,     270,    180,   0, ], 
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
             }, {
         POSITION: [  5.7,     9,      0,     240,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
             }, {
         POSITION: [  5.7,     9,      0,     210,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
                 }, {
         POSITION: [  5.7,     9,      0,     180,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}], 
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }], 
                 }, {
         POSITION: [  5.7,     9,      0,     150,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
                 }, {
         POSITION: [  5.7,     9,      0,     120,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
                     }, {
         POSITION: [  5.7,     9,      0,     90,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
                     }, {
         POSITION: [  5.7,     9,      0,     60,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
                     }, {
         POSITION: [  5.7,     9,      0,     30,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],  
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],  
                         }, {
         POSITION: [  5.7,     9,      0,     0,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}], 
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }], 
                 }, {
         POSITION: [  13.6,  0,    0,       0,    360,   1, ],  
             TYPE: [exports.Celestialbody12]
@@ -18426,15 +18424,66 @@ exports.Celestialeternal = {
             TYPE: [exports.Celestialbody32]
                     }, {
         POSITION: [  5.7,     9,      0,     -90,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
                     }, {
         POSITION: [  5.7,     9,      0,     -60,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
                     }, {
         POSITION: [  5.7,     9,      0,     -30,    180,   0, ],
-            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            TYPE: [exports.trapTurret, { INDEPENDENT: true }],
     }],
 };
+
+exports.portalGlow = {
+    LABEL: "",
+    COLOR: 16,
+    SHAPE: 0,
+    GUNS: [],
+    CONTROLLERS: ['spin', 'alwaysFire'],
+    MAX_CHILDREN: 18,
+    HAS_NO_RECOIL: true
+}
+exports.portal = {
+    PARENT: [exports.genericTank],
+    LABEL: "Portal",
+    COLOR: 9,
+    SIZE: 50,
+    LEVEL: 0,
+    HITS_OWN_TYPE: "never",
+    BODY: {
+        ACCELERATION: 0,
+        SPEED: 0,
+        DAMAGE: 0,
+        HEALTH: 1e99,
+        PUSHABILITY: 0,
+    },
+    TURRETS: [
+        {
+            POSITION: [17, 0, 0, 0, 360, 1],
+            TYPE: [exports.portalGlow]
+        }
+    ],
+    DRAW_HEALTH: false,
+    IGNORED_BY_AI: true,
+    ACCEPTS_SCORE: false,
+    DAMAGE_EFFECTS: false,
+    CAN_BE_ON_LEADERBOARD: false
+}
+//pin
+for (let i = 0; i < 30; i++) {
+    let angle = 360 / 30
+    exports.portalGlow.GUNS.push({
+        POSITION: [0, 6.5, 1, -50 + -Math.random(), 0, angle * i, Math.random()],
+        PROPERTIES: {
+            TYPE: [exports.bullet, {
+                ALPHA: 0.25,
+                DIE_AT_LOW_SPEED: true
+            }],
+            INVISIBLE: true,
+            SHOOT_SETTINGS: combineStats([g.basic, g.weak])
+        }
+    })
+}
 
 // TOKEN "UPGRADE PATHS"
 exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.bossesMenu, exports.retrograde, exports.miscEntities, exports.levels, exports.teams];
@@ -18451,7 +18500,7 @@ exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.l
         exports.nostalgiaMenu.UPGRADES_TIER_0 = [exports.oldSpreadshot, exports.bentBoomer, exports.quadBuilder, exports.quintuplet, exports.vulcan, exports.sniper3, exports.weirdSpike, exports.master, exports.oldCommander, exports.blunderbuss, exports.oldRimfire, exports.ransacker];
 
 // MISCELLANEOUS
-exports.miscEntities.UPGRADES_TIER_0 = [exports.dominators, exports.baseProtector, exports.mothership, exports.arenaCloser];
+exports.miscEntities.UPGRADES_TIER_0 = [exports.portal, exports.dominators, exports.baseProtector, exports.mothership, exports.arenaCloser];
 exports.dominators.UPGRADES_TIER_0 = [exports.dominator, exports.destroyerDominator, exports.gunnerDominator, exports.trapperDominator];
 
 // TANK UPGRADE PATHS

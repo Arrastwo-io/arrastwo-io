@@ -90,4 +90,6 @@ let _temp = new App(),
     _ws = new (require('ws').WebSocketServer)({ noServer: true });
 _temp.use(corsMiddleware);
 _temp.use(logMiddleware);
-_temp.start(_ws, c.port);
+
+let server = _temp.start(_ws, c.port);
+module.exports = { server }

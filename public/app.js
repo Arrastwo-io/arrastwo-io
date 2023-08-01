@@ -825,7 +825,7 @@ const drawEntity = (x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turret
         if (t.layer === 0) {
             let ang = t.direction + t.angle + rot,
                 len = t.offset * drawSize,
-                facing =  source.turrets[i].lerpedFacing + turretsObeyRot * rot;//util.lerp(t.defaultAngle + rot, source.turrets[i].lerpedFacing + turretsObeyRot * rot, t.perceptionAngleIndependence);
+                facing = source.turrets[i].lerpedFacing + turretsObeyRot * rot;//util.lerp(t.defaultAngle + rot, source.turrets[i].lerpedFacing + turretsObeyRot * rot, t.perceptionAngleIndependence);
             drawEntity(xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
         }
     }
@@ -838,8 +838,10 @@ const drawEntity = (x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turret
             gx = g.offset * Math.cos(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.cos(g.angle + rot),
             gy = g.offset * Math.sin(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.sin(g.angle + rot),
             gunColor = g.color == null ? color.grey : getColor(g.color);
-        setColor(context, mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-        drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot);
+        if (g.alpha) {
+            setColor(context, mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot);
+        }
     }
     // Draw body
     context.globalAlpha = 1;

@@ -20,6 +20,7 @@ global.grid = new hshg.HSHG();
 global.arenaClosed = false;
 global.mockupsLoaded = false;
 global.nextTagBotTeam = null;
+global.disconnections = [];
 global.getTeam = function getTeam(type = 0) { // 0 - Bots only, 1 - Players only, 2 - all
     const teamData = {};
     for (let i = 0; i < (c.TEAMS - (c.secondaryGameMode.includes("Manhunt") ? 1 : 0)); i++) teamData[i + 1] = 0;

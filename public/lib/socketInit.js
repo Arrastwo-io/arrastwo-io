@@ -735,7 +735,11 @@ const socketInit = port => {
                     socket.talk('s', global.playerName, 1, 1 * config.game.autoLevelUp);
                     global.message = '';
                 }
-            break;
+                break;
+            case 't':
+                console.log('The game will reconnect soon.');
+                global.message = 'Score saved. Please Use it within the nearest 24 hours.';
+                break;
             case 'R': // room setup
                 global.gameWidth = m[0];
                 global.gameHeight = m[1];

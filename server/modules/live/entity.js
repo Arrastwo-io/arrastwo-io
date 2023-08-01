@@ -19,6 +19,7 @@ class Gun {
             fire: false,
         };
         this.color = 16;
+        this.alpha = true;
         this.canShoot = false;
         if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
             this.canShoot = true;
@@ -69,12 +70,11 @@ class Gun {
             this.countsOwnKids = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
-            this.color = info.PROPERTIES.COLOR == null ? this.color : info.PROPERTIES.COLOR;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
-            if (info.PROPERTIES.COLOR != null && info.PROPERTIES != null) this.color = info.PROPERTIES.COLOR;
         }
         if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null) this.color = info.PROPERTIES.COLOR;
+        if (info.PROPERTIES != null && info.PROPERTIES.INVISIBLE != null) this.alpha = !info.PROPERTIES.INVISIBLE;
         if (info.PROPERTIES != null && info.PROPERTIES.ON_SHOOT != null) this.onshoot = info.PROPERTIES.ON_SHOOT;
         let position = info.POSITION;
         this.length = position[0] / 10;
@@ -562,7 +562,7 @@ let amNaN = me => [
 ].map((entry) => !!entry).some((entry) => entry);
 function antiNaN(me) {
     let nansInARow = 0;
-    let data = { x: 0, y: 0, vx: 0, vy: 0, ax: 0, ay: 0 };
+    let data = { x: 1, y: 1, vx: 1, vy: 1, ax: 1, ay: 1 };
 
     return function() {
         if (amNaN(me)) {
@@ -772,14 +772,13 @@ class Entity extends EventEmitter {
     }
     become(player, dom = false) {
         this.addController(
-            dom
-                ? new ioTypes.listenToPlayerStatic(this, { player })
+            dom ? new ioTypes.listenToPlayerStatic(this, { player })
                 : new ioTypes.listenToPlayer(this, { player })
         );
-        this.sendMessage = (content, color) => player.socket.talk("m", content);
+        this.sendMessage = (content) => player.socket.talk("m", content);
         this.kick = (reason) => player.socket.kick(reason);
     }
-    giveUp(player, name = "Mothership") {
+    giveUp(player) {
         if (!player.body.isMothership)
             player.body.controllers = [
                 new ioTypes.nearestDifferentMaster(player.body),
@@ -803,8 +802,10 @@ class Entity extends EventEmitter {
         player.body = fakeBody;
         player.body.kill();
     }
-    reset_func() {
-        this.controllers = this.controllers.filter(controller => controller instanceof ioTypes.listenToPlayer);
+    reset_func(p = true) {
+        this.controllers = this.controllers.filter(controller => p
+            ? controller instanceof ioTypes.listenToPlayer
+            : !controller instanceof ioTypes.listenToPlayer);
     }
     setLevel(level) {
         if (level === -1) {
@@ -1036,8 +1037,6 @@ class Entity extends EventEmitter {
             arc: position[4] * Math.PI / 180,
             layer: position[5]
         };
-        // Figure out how we'll be drawn.
-        this.bound.layer = position[5];
         // Initalize.
         this.facing = this.bond.facing + this.bound.angle;
         this.facingType = "bound";
@@ -1128,10 +1127,6 @@ class Entity extends EventEmitter {
             default:
                 return 1;
         }
-    }
-    moveToMoon() {
-        if (!this.controllers.filter(controller => controller instanceof ioTypes.moveMoon).length)
-            this.controllers.push(new ioTypes.moveMoon(this));
     }
     move() {
         let g = {
