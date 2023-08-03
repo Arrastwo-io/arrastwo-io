@@ -1,8 +1,20 @@
-# Title 1: Description 1
-- Change 1
-- Change 2
-- Change 3
+# Major Update: v0.1
+- Welcome server browsing!
+- Improved servers
+- More bug fixes
+- improved the way servers are displayed
+- Some code bug fixes
+- Fixed bullets count as kills
+- More code improves
+- Rewrite of server config
+- Added invisible guns!
+- Added score portals
+- Fixed player reconnect bug
+- Some level tanks improves
+- Some more code cuts!
+- Improved Healer bullets
+- Improved visual game part
 
-# Title 2: Description 2
+<!-- # Title 2: Description 2
 - Change 4
-- Change 5
+- Change 5 -->
