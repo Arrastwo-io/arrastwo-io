@@ -1531,7 +1531,7 @@ const sockets = {
         //account for proxies
         socket.ip = req.headers['fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
                     req.headers['forwarded']        || req.headers['x-real-ip']       || req.connection.remoteAddress;
-        //socket.ip = socket.ip.split(",")[0];
+        if (c.host != "localhost") socket.ip = socket.ip.split(",")[0];
         if (!net.isIP(socket.ip)) return socket.kick("Invalid IP: " + socket.ip);
         // Log it
         clients.push(socket);
