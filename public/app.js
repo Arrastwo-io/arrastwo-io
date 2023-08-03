@@ -302,7 +302,7 @@ window.onload = async () => {
         .getElementById("startMenuSlidingContent")
         .removeChild(document.getElementById("serverName"));
     serverSelector.classList.add("serverSelector");
-    serverSelector.classList.add("shadowscroll");
+    serverSelector.classList.add("shadowScroll");
     serverSelector.appendChild(tbody);
     let myServer = {
         classList: {

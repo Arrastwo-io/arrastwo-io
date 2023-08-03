@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <meta name="description" content="Arras.io is a fan-made sequel of diep.io. Survive and shoot at others while keeping your own tank alive! Play the game at https://arras.io/.">
+    <meta name="description" content="Arras.io2 is a fan-made sequel of arras.io. Survive and shoot at others while keeping your own tank alive! Play the game at https://arrastwo-io.glitch.me/">
     <meta name="robots" content="index, follow">
     <meta property="og:image" content="//arras.io/favicon/96x96.png">
     <meta property="og:image:width" content="54">
@@ -25,7 +25,9 @@
         <div id="startMenuWrapper">
             <div id="startMenu">
                 <div id="twitterHolder" class="startMenuHolder">
-                  <center>This Arras2.io Private Server runs on APS++.</center>
+                    <center>This Arras2.io Project Server runs with APS++ on Glitch</center>
+                    <br>
+                    <iframe src="https://discord.com/widget?id=1130380005906599956&theme=dark" width="350" height="300" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
                 </div>
                 <div class="startMenuHolder">
                     <div class="sliderHolder">
@@ -41,8 +43,10 @@
                         <div class="slider" id="startMenuSlidingTrigger">
                             <h3 class="nopadding">view options/help</h3>
                         </div>
-                        <div class="slider">
+                        <div class="slider" id="sliderMain">
+                            <div class="span">Key Input</div>
                             <input type="text" class="conceal" tabindex="-1" placeholder="Insert token here" id="playerKeyInput" maxlength="64" />
+                            <div class="span">Controllers</div>
                             <table>
                                 <tr> <td><b>E</b>: auto-fire</td>     <td><b>C</b>: auto-spin</td> </tr>
                                 <tr> <td><b>R</b>: disable ai</td>    <td><b>N</b>: level up</td> </tr>
@@ -51,6 +55,7 @@
                                 <tr> <td><b>T</b>: show tank tree</td><td><b>M</b>: maximise stat</td> </tr>
                                 <tr> <td><b>X</b>: spin lock</td><!--<td><b>M</b>: maximise stat</td>--> </tr>
                             </table>
+                            <div class="span">Themes</div>
                             <options_header>Options:</options_header>
                             <select id="optColors" tabindex="-1">
                                 <option value="normal">Light Colors</option>
@@ -63,6 +68,8 @@
                                 <option value="ocean">Coral Reef (Fan-made)</option>
                                 <option value="badlands">Badlands (Fan-made)</option>
                                 <option value="bleach">Bleach (Fan-made)</option>
+                                <option value="space">Space (Fan-made)</option>
+                                <option value="sea">Sea (Fan-made)</option>
                             </select>
                             <select id="optBorders" tabindex="-1">
                                 <option value="normal">Soft Borders</option>
@@ -70,6 +77,7 @@
                                 <option value="neon">Neon Mode</option>
                                 <option value="glass">Glass Mode</option>
                             </select>
+                            <div class="span">Settings</div>
                             <table>
                                 <tr>
                                     <td><div><label><input id="optScreenshotMode"   tabindex="-1" class="checkbox" type="checkbox"> Screenshot Mode</label></div></td>
@@ -86,6 +94,9 @@
                                 <tr>
                                     <td><div><label><input id="autoLevelUp"         tabindex="-1" class="checkbox" type="checkbox"> Auto-Level Up</label></div></td>
                                     <td><div><label><input id="centerTank"          tabindex="-1" class="checkbox" type="checkbox"> Smooth Camera</label></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div><label><input id="optSound"            tabindex="-1" class="checkbox" type="checkbox" onclick="switchAudio()"> Music</label></div></td>
                                 </tr>
                             </table>
                         </div>
@@ -116,8 +127,8 @@
                     <form action="https://arrasrecords.weebly.com/">
                         <input id="records" type="submit" value="World Records">
                     </form>
-                    <form action="https://www.serverhunter.com/landing/?ad=arrasio&amp;utm_source=arrasio&amp;utm_medium=cpc&amp;utm_content=button">
-                      <input id="sponsor" type="submit" value="[#AD] Server Hunter">
+                    <form action="https://codepen.io/road-to-100k/full/GRpvMzb/">
+                        <input id="sponsor" type="submit" value="Theme Maker">
                     </form>
                 </div>
             </div>
@@ -135,14 +146,35 @@
     <script type="module" src="./app.js"></script>
     <script>
         var clicked = false;
+        var music = new Audio();
+        var pmusic = [
+            "https://cdn.glitch.global/e6ae5d3c-3d96-4412-99d2-9bae32c66b05/yt1s.com%20-%20Key.mp3?v=1688451436448",
+            "https://cdn.glitch.global/454cae5f-0e72-4f17-8132-2bd458b29ba9/yt1s.com%20-%20Sweden.mp3?v=1688544914238"
+        ];
+
+        music.src = (pmusic[~~(Math.random() * pmusic.length)]);
+        function switchAudio() {
+            if (document.getElementById("optSound").checked == true) {
+                music.play();
+                music.addEventListener('ended', function() {
+                    this.currentTime = 0;
+                    this.play();
+                }, false);
+            } else if (document.getElementById("optSound").checked == false) {
+                music.pause();
+            }
+        };
+
         $("#startMenuSlidingTrigger").on('click', function() {
             clicked = !clicked;
             if (clicked) {
                 $(this).html('<h3 class="nopadding">close options/help</h3>');
-                $(".slider").css({ "top": "-265px" })
+                $(".slider").css({ "top": "-265px" });
+                $(".sliderHolder").addClass("shadowScroll");
             } else {
                 $(this).html('<h3 class="nopadding">view options/help</h3>');
                 $(".slider").css({ "top": 0 });
+                $(".sliderHolder").removeClass("shadowScroll");
             }
         });
         if (navigator.serviceWorker) navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(registration => console.log('Service Worker Registered'));
