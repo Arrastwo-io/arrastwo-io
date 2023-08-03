@@ -65,7 +65,12 @@ function logMiddleware(req, res, next) {
             let fileToGet = path.join(publicRoot, req.url);
 
             //if this FILE does not exist, return the default;
-            if (!fs.lstatSync(fileToGet).isFile()) {
+            try {
+                if (!fs.lstatSync(fileToGet).isFile()) {
+                    throw fileToGet;
+                }    
+            } catch (err) {
+                console.log(err);
                 fileToGet = path.join(publicRoot, c.DEFAULT_FILE);
             }
 
