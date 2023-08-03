@@ -14,7 +14,3 @@
 - Some more code cuts!
 - Improved Healer bullets
 - Improved visual game part
-
-<!-- # Title 2: Description 2
-- Change 4
-- Change 5 -->

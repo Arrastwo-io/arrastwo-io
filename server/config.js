@@ -1,5 +1,5 @@
 module.exports = {
-    host: "localhost",
+    host: "arrastwo-io.glitch.me",
     servesStatic: true,
     port: 3000,
     networkUpdateFactor: 24,
