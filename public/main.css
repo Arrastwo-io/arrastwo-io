@@ -8,6 +8,9 @@
 }
 
 #mainBody {
+    background-image: url(
+        "https://cdn.glitch.global/454cae5f-0e72-4f17-8132-2bd458b29ba9/Schermafbeelding%202023-07-06%20151136.png?v=1688668689921"
+    );
     background-color: #484848;
 }
 
@@ -154,6 +157,11 @@ input.checkbox {
 #playerKeyInput {
     padding: 3px;
     color: gray;
+    width: 90%;
+}
+
+#sliderMain {
+    text-align: center;
 }
 
 input:focus,
@@ -229,6 +237,9 @@ div {
     width: 350px;
     height: 285px;
     overflow: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.15);
 }
 
 td {
@@ -262,15 +273,17 @@ table {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-update {
-    color: #D83848;
-    font-weight: bold;
-}
-
 .titleSpan {
     font-size: x-large;
     font-weight: bold;
     text-align: center;
+}
+
+.span {
+    padding-top: 12px;
+    padding-bottom: 3px;
+    font-size: large;
+    font-weight: bold;
 }
 
 #patchNotes {
