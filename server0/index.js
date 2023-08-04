@@ -737,7 +737,7 @@ const portalLoop = () => {
     o.team = -100;
     setTimeout(() => {
         o.destroy();
-    }, 60000 * 4); // 4 minutes
+    }, 60000 * 1); // 1 minute
 };
 
 // Bring it to life
@@ -778,6 +778,6 @@ setInterval(gameloop, room.cycleSpeed);
 setInterval(maintainloop, 1000);
 setInterval(speedcheckloop, 1000);
 setInterval(gamemodeLoop, 1000);
-//setInterval(portalLoop, 60000 * 6); // Every 6 minutes
 portalLoop();
+setInterval(portalLoop, 60000 * 3); // Every 3 minutes
 setInterval(closeArena, 60000 * 120); // Restart every 2 hours
