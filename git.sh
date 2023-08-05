@@ -18,16 +18,16 @@ if [ "$origin_url" != "$GITHUB_URL" ]; then
 fi
 
 # checkout master
-git checkout testSource
+git checkout master
 
 # fetch the newest code
-git fetch origin testSource
+git fetch origin master
 
 # hard reset
-git reset --hard origin/testSource
+git reset --hard origin/master
 
 # force pull
-git pull origin testSource --force
+git pull origin master --force
 
 # refresh the editor
 refresh
