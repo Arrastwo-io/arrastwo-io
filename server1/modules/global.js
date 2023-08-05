@@ -3,7 +3,6 @@ let EventEmitter = require('events');
 global.events = new EventEmitter();
 global.c = require("./setup/config.js").outputGameMode;
 global.randomGameMode = require("./setup/config.js").randomGameMode;
-global.c.port = process.env.PORT || c.port;
 global.ran = require("../../server/lib/random.js");
 global.util = require("../../server/lib/util.js");
 global.hshg = require("../../server/lib/hshg.js");
