@@ -7,7 +7,6 @@ global.ran = require("../../server/lib/random.js");
 global.util = require("../../server/lib/util.js");
 global.hshg = require("../../server/lib/hshg.js");
 global.protocol = require("../../server/lib/fasttalk.js");
-global.fetch = require('node-fetch');
 
 // Global Variables (These must come before we import from the modules folder.)
 global.roomSpeed = c.gameSpeed;
