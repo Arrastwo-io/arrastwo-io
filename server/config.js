@@ -1,5 +1,6 @@
 module.exports = {
-    host: "arrastwo-io.glitch.me",
+    //host: "arrastwo-io.glitch.me",
+    host: "localhost",
     servesStatic: true,
     port: 3000,
     networkUpdateFactor: 24,
@@ -48,7 +49,7 @@ module.exports = {
     SKILL_BOOST: 5,
     // Use defaults?
     BOTS_USE_DEFAULT: true,
-    BOTS: 0,
+    BOTS: 6,
     GLASS_HEALTH_FACTOR: 2,
     HALF: false,
     TRAIN: false,

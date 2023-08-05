@@ -738,7 +738,7 @@ const socketInit = port => {
                 break;
             case 't':
                 console.log('The game will reconnect soon.');
-                global.message = 'Score saved. Please Use it within the nearest 24 hours.';
+                global.message = 'Score saved. Please Use it within the nearest 12 hours.';
                 break;
             case 'R': // room setup
                 global.gameWidth = m[0];

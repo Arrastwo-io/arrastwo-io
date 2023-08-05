@@ -46,26 +46,6 @@ let servers = [
         gameMode: c.gameModeName,
         players: 0,
         ip: c.host
-    },
-    {
-        gameMode: "",
-        players: 0,
-        ip: c.host.split(":")[0] + ":3001"
-    },
-    {
-        gameMode: "",
-        players: 0,
-        ip: c.host.split(":")[0] + ":3002"
-    },
-    {
-        gameMode: "",
-        players: 0,
-        ip: c.host.split(":")[0] + ":3003"
-    },
-    {
-        gameMode: "",
-        players: 0,
-        ip: c.host.split(":")[0] + ":3004"
     }
 ];
 
