@@ -79,11 +79,7 @@ function logMiddleware(req, res, next) {
                 if (server.port == c.port) { servers[index].players = clients.length; }
                 else {
                     fetch(
-                        (c.host.includes("localhost") ? "http://" : "https://") +
-                        server.ip +
-                        ":" +
-                        server.port +
-                        "/serverData.json"
+                        "http://" + server.ip + ":" + server.port + "/serverData.json"
                     )
                         .then(response => {
                             if (!response.ok) throw new Error('Network response was not ok');
