@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server0/index.js",
   "scripts": {
-    "start": "concurrently \"node --optimize-for-size --no-lazy --gc_interval=120 server0/index\""
+    "start": "concurrently \"node --optimize-for-size --no-lazy --gc_interval=120 server0/index\" \"node --optimize-for-size --no-lazy --gc_interval=120 server1/index\" \"node --optimize-for-size --no-lazy --gc_interval=120 server2/index\" \"node --optimize-for-size --no-lazy --gc_interval=120 server3/index\" \"node --optimize-for-size --no-lazy --gc_interval=120 server4/index\""
   },
   "dependencies": {
     "concurrently": "^8.2.0",

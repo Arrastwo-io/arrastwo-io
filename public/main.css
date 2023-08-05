@@ -534,12 +534,14 @@ form {
 }
 
 #startMenuWrapper {
-    -webkit-transition: max-height 1s;
-    -moz-transition: max-height 1s;
-    -ms-transition: max-height 1s;
-    -o-transition: max-height 1s;
-    transition: max-height 1s;
-    overflow: hidden;
+    -webkit-transition: top 1.9s;
+    -moz-transition: top 1.9s;
+    -ms-transition: top 1.9s;
+    -o-transition: top 1.9s;
+    transition: top 1.9s;
+    position: relative;
+    top: 0px;
+    z-index: 2;
 }
 
 .nopadding {
@@ -557,10 +559,6 @@ form {
     color: red;
     opacity: 0;
     font-size: 12px;
-}
-
-#startMenuWrapper {
-    z-index: 2;
 }
 
 #gameAreaWrapper {

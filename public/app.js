@@ -18,7 +18,7 @@ fetch("changelog.md", { cache: "no-cache" })
     });
 });
 class Animation {
-    constructor(start, to, smoothness = 0.05) {
+    constructor(start, to, smoothness = 0.03) {
         this.start = start;
         this.to = to;
         this.value = start;
@@ -293,6 +293,7 @@ function getMockups() {
 }
 window.onload = async () => {
     const serverData = await (await fetch("/serverData.json")).json();
+    if (serverData.filter(r => r.gameMode == "").length) location.reload();
     window.serverAdd = serverData[0].ip;
     const servers = serverData;
     let serverSelector = document.getElementById("serverSelector"),
@@ -477,6 +478,7 @@ function startGame() {
     global.screenWidth = window.innerWidth;
     global.screenHeight = window.innerHeight;
     document.getElementById("startMenuWrapper").style.maxHeight = "0px";
+    document.getElementById("startMenuWrapper").style.top = "-728px";
     document.getElementById("gameAreaWrapper").style.opacity = 1;
     // Set up the socket
     if (!global.socket) {
@@ -1793,6 +1795,7 @@ const gameDrawDisconnected = () => {
     let shift = animations.disconnected.get();
     ctx.translate(0, -shift * global.screenHeight);
     textDisconnected.disconnected.draw("Disconnected", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
+    if (global.message = '') global.message = 'The connection has closed. you may attempt to regain score or reload the game.';
     textDisconnected.message.draw(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
