@@ -12,7 +12,7 @@ module.exports = {
     runSpeed: 1.5,
     maxHeartbeatInterval: 300000,
     verbose: true,
-    bossSpawnInterval: 8,
+    bossSpawnInterval: 20,
     WIDTH: 0,
     HEIGHT: 0,
     MODE: "ffa",
@@ -49,7 +49,7 @@ module.exports = {
     SKILL_BOOST: 5,
     // Use defaults?
     BOTS_USE_DEFAULT: true,
-    BOTS: 6,
+    BOTS: 0,
     GLASS_HEALTH_FACTOR: 2,
     HALF: false,
     TRAIN: false,
