@@ -2,11 +2,10 @@ const defaults = require("../../../server/config.js");
 
 const gamemode = {
     cycle: false,
-    game: [],
-    mode: [
-        "Siege",
-        "Shiny"
+    game: [
+        "FFA"
     ],
+    mode: [],
     ROOM_SETUP: [
         [ "boss", "boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss", "boss" ],
         [ "boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss" ],
@@ -115,7 +114,6 @@ const names = [
 ];
 
 defaults.port = defaults.port + Number(__dirname.split("server")[1].split("/")[0]);
-defaults.host = defaults.host + ":" + defaults.port;
 
 let outputGameMode = {};
 let randomGameMode = (cycle) => {

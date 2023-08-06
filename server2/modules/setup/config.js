@@ -112,7 +112,6 @@ const names = [
 ];
 
 defaults.port = defaults.port + Number(__dirname.split("server")[1].split("/")[0]);
-defaults.host = defaults.host + ":" + defaults.port;
 
 let outputGameMode = {};
 let randomGameMode = (cycle) => {

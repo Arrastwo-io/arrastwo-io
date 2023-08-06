@@ -9,7 +9,15 @@ let compressMovementOffsets = [
     { x: 1, y:-1}
 ],
 compressMovement = (current, goal) => {
-    let offset = compressMovementOffsets[Math.round(( Math.atan2(current.y - goal.y, current.x - goal.x) / (Math.PI * 2) ) * 8 + 4) % 8];
+    let index = Math.max(
+        0,
+        Math.min(
+            Math.round((Math.atan2(current.y - goal.y, current.x - goal.x) / (Math.PI * 2)) * 8 + 4),
+            compressMovementOffsets.length - 1
+        )
+    );
+    let offset = compressMovementOffsets[index];
+
     return {
         x: current.x + offset.x,
         y: current.y + offset.y
