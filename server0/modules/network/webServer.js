@@ -53,18 +53,6 @@ let servers = [
         players: 0,
         ip: "localhost",
         port: 3001
-    },
-    {
-        gameMode: "",
-        players: 0,
-        ip: "localhost",
-        port: 3002
-    },
-    {
-        gameMode: "",
-        players: 0,
-        ip: "localhost",
-        port: 3003
     }
 ];
 
@@ -76,12 +64,12 @@ function logMiddleware(req, res, next) {
             break;
         case "/serverData.json":
             servers.forEach((server, index) => {
-                if (server.port == c.port) { servers[index].players = clients.length; }
+                if (server.port == c.port && server.ip == c.host) { servers[index].players = clients.length; }
                 else {
                     fetch(
                         (server.ip == "localhost" ? "http://" : "https://") +
                         server.ip +
-                        (server.port == c.port ? "" : (":" + server.port)) +
+                        (server.ip == "localhost" ? (":" + server.port) : "") +
                         "/serverData.json"
                     )
                         .then(response => {
