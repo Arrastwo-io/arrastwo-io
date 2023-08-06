@@ -1,9 +1,5 @@
 {
-  "name": "@CLASHTEST/arras2",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/octocat/arrastwo-io.git"
-  },
+  "name": "arras2",
   "version": "1.0.0",
   "main": "server0/index.js",
   "scripts": {
