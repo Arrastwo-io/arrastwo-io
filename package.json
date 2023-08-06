@@ -1,9 +1,8 @@
 {
-  "name": "@Arrastwo-io/arrastwo-io",
+  "name": "arras2",
   "version": "1.0.0",
   "main": "server0/index.js",
   "scripts": {
-    "test": "exit 0",
     "start": "concurrently \"node --optimize-for-size --no-lazy --gc_interval=120 server0/index\" \"node --optimize-for-size --no-lazy --gc_interval=120 server1/index\""
   },
   "dependencies": {
@@ -13,9 +12,6 @@
   },
   "engines": {
     "node": "16.x"
-  },
-  "publishConfig": {
-    "@Arrastwo-io:arrastwo-io": "https://npm.pkg.github.com"
   },
   "license": "MIT"
 }
