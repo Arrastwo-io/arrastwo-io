@@ -1,15 +1,15 @@
 const defaults = require("../../../server/config.js");
 
 const gamemode = {
-    cycle: true,
-    game: [
-        "Maze"
+    cycle: false,
+    game: [],
+    mode: [
+        "Siege"
     ],
-    mode: [],
     ROOM_SETUP: [
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
+        [ "boss", "boss", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "boss", "boss" ],
+        [ "boss", "norm", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "norm", "boss" ],
+        [ "wall", "norm", "norm", "norm", "norm", "norm", "bas1", "bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "wall" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm" ],
@@ -19,9 +19,9 @@ const gamemode = {
         [ "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ]
+        [ "wall", "norm", "norm", "norm", "norm", "norm", "bas1", "bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "wall" ],
+        [ "boss", "norm", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "norm", "boss" ],
+        [ "boss", "boss", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "boss", "boss" ]
     ],
     X_GRID: 15,
     Y_GRID: 15,

@@ -1,14 +1,7 @@
 const bossRush = new BossRush()
 const ballLoop = new BallLoop()
 
-const modesInit = () => {
-    if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
-    if (c.SOCCER) ballLoop.spawn();
-    if (c.DOMINATOR_LOOP) dominatorLoop.reset();
-    if (c.TAG) tagReset();
-    if (c.SPECIAL_BOSS_SPAWNS) bossRush.reset();
-}
-const basepro = () => {
+const modesInit = function () {
     for (let team = 1; team < c.TEAMS + 1; team++) {
         room["bap" + team].forEach((loc) => {
             let o = new Entity(loc);
@@ -33,22 +26,20 @@ const basepro = () => {
         o.SIZE = room.width / 10;
         room.blackHoles.push(o);
     }
+    if (c.SPECIAL_BOSS_SPAWNS) {
+        bossRush.init();
+        bossRush.reset();
+    }
+    if (c.MAZE && typeof c.MAZE == "number") generateMaze(c.MAZE);
+    if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
+    if (c.SOCCER) ballLoop.spawn();
+    if (c.DOMINATOR_LOOP) dominatorLoop.reset();
+    if (c.TAG) tagReset();
 }
 
-if (c.MAZE && typeof c.MAZE == "number") generateMaze(c.MAZE);
-if (c.GROWTH && typeof c.GROWTH == "number") {
-    c.LEVEL_SKILL_POINT_FUNCTION = level => {
-        if (level < 2) return 0;
-        if (level <= c.SKILL_CHEAT_CAP) return 1;
-        if (level <= (c.GROWTH + 1) * 2 - c.SKILL_CHEAT_CAP && level & 1 == 1) return 1;
-        return 0;
-    };
-}
-if (c.DOMINATOR_LOOP)
-    for (let loc of room.dom0)
-        dominatorLoop.spawn(loc, c.gameModeName.includes("Assault") ? -c.TEAMS : -100, 3);
-if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
 modesInit();
+if (c.DOMINATOR_LOOP)
+    for (let loc of room.dom0) dominatorLoop.spawn(loc, c.gameModeName.includes("Assault") ? -c.TEAMS : -100, 3);
 
 let logger = new LagLogger();
 const gamemodeLoop = function() {
@@ -78,4 +69,4 @@ const gamemodeLoop = function() {
     }
 };
 
-module.exports = { gamemodeLoop, modesInit, basepro };
+module.exports = { gamemodeLoop, modesInit };

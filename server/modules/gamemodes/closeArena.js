@@ -1,22 +1,15 @@
 let loop;
 function close() {
     util.log("[INFO] Arena closed!");
-    sockets.broadcast("Closing!");
+    sockets.broadcast("CLOSING...");
     clearInterval(loop);
     setTimeout(() => {
         loopThrough(entities, function (instance) {
-            if (
-                (
-                    instance.isPlayer ||
-                    instance.team == -102 ||
-                    instance.team == -100 ||
-                    (instance.team == c.TEAMS && c.gameModeName.includes("Assault"))
-                ) &&
-                disconnections.filter(r => r.body.id != instance.id).length
-            ) instance.destroy();
+            instance.destroy();
         });
         global.arenaClosed = false;
-        basepro();
+        c = randomGameMode(c.cycleGame);
+        for (let type of room.cellTypes) room.findType(type);
         modesInit();
         util.log("[INFO] Arena opened!");
     }, 10000);
@@ -56,13 +49,13 @@ function closeArena() {
         let ticks = 0;
         loopThrough(entities, function (instance) {
             if (
-                instance.label.includes("Dreadnought") &&
-                disconnections.filter(r => r.body.id != instance.id).length
+                instance.label.includes("Dreadnought") //&&
+                //disconnections.filter(r => r.body.id != instance.id).length
             ) instance.destroy();
         });
         loop = setInterval(function checkSurvivors() {
             ticks++;
-            if (ticks >= 200) return close();
+            if (ticks >= 300) return close();
             let alive = false;
             loopThrough(entities, function (instance) {
                 if (

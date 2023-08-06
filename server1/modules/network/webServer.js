@@ -47,12 +47,6 @@ let servers = [
         players: 0,
         ip: c.host,
         port: c.port
-    },
-    {
-        gameMode: "",
-        players: 0,
-        ip: "localhost",
-        port: 3001
     }
 ];
 
@@ -64,24 +58,7 @@ function logMiddleware(req, res, next) {
             break;
         case "/serverData.json":
             servers.forEach((server, index) => {
-                if (server.port == c.port && server.ip == c.host) { servers[index].players = clients.length; }
-                else {
-                    fetch(
-                        (server.ip == "localhost" ? "http://" : "https://") +
-                        server.ip +
-                        (server.ip == "localhost" ? (":" + server.port) : "") +
-                        "/serverData.json"
-                    )
-                        .then(response => {
-                            if (!response.ok) throw new Error('Network response was not ok');
-                            return response.json();
-                        })
-                        .then(data => {
-                            servers[index].gameMode = data[0].gameMode;
-                            servers[index].players = data[0].players;
-                        })
-                        .catch(error => console.error('Fetch error: ', error));
-                }
+                if (server.port == c.port) servers[index].players = clients.length;
             })
             resStr = JSON.stringify(servers);
             break;

@@ -1,5 +1,6 @@
 module.exports = {
-    host: "arrastwo-io.glitch.me",
+    //host: "arrastwo-io.glitch.me",
+    host: "localhost",
     servesStatic: true,
     port: 3000,
     networkUpdateFactor: 24,
@@ -11,7 +12,7 @@ module.exports = {
     runSpeed: 1.5,
     maxHeartbeatInterval: 300000,
     verbose: true,
-    bossSpawnInterval: 8,
+    bossSpawnInterval: 20,
     WIDTH: 0,
     HEIGHT: 0,
     MODE: "ffa",

@@ -378,13 +378,13 @@ const process = (z = {}) => {
         z.interval = global.metrics.rendergap;
         z.id = get.next();
         // Determine if this is an new entity or if we already know about it
-        let iii = global.entities.findIndex(x => x.id === z.id);
-        if (iii !== -1) {
+        let i = global.entities.findIndex(x => x.id === z.id);
+        if (i !== -1) {
             // remove it if needed (this way we'll only be left with the dead/unused entities)
-            z = global.entities.splice(iii, 1)[0];
+            z = global.entities.splice(i, 1)[0];
         }
         // Change the use of the variable
-        isNew = iii === -1;
+        isNew = i === -1;
         // If it's not new, save the memory data
         if (!isNew) {
             z.render.draws = true; // yay!!
@@ -452,8 +452,8 @@ const process = (z = {}) => {
                 interval: global.metrics.rendergap,
                 slip: 0,
                 status: Status(),
-                health: util.Smoothbar(z.health, 0.5, 5, .06),
-                shield: util.Smoothbar(z.shield, 0.5, 5, .06),
+                health: util.Smoothbar(z.health, 0.5, 5, .15),
+                shield: util.Smoothbar(z.shield, 0.5, 5, .15),
             };
         }
         if (invuln) {
@@ -610,10 +610,7 @@ const convert = {
         by = leaderboardInt.update(all, by);
         get.take(by);
         let map = [];
-        for (let {
-                id,
-                data
-            } of minimapAllInt.entries()) {
+        for (let { id, data } of minimapAllInt.entries()) {
             map.push({
                 id,
                 type: data[0],
@@ -623,10 +620,7 @@ const convert = {
                 size: data[4]
             });
         }
-        for (let {
-                id,
-                data
-            } of minimapTeamInt.entries()) {
+        for (let { id, data } of minimapTeamInt.entries()) {
             map.push({
                 id,
                 type: 0,
@@ -638,10 +632,7 @@ const convert = {
         }
         minimap.update(map);
         let entries = [];
-        for (let {
-                id,
-                data
-            } of leaderboardInt.entries()) {
+        for (let { id, data } of leaderboardInt.entries()) {
             entries.push({
                 id,
                 score: data[0],
@@ -738,7 +729,7 @@ const socketInit = port => {
                 break;
             case 't':
                 console.log('The game will reconnect soon.');
-                global.message = 'Score saved. Please Use it within the nearest 24 hours.';
+                global.message = 'Score saved. Please Use it within the nearest 12 hours.';
                 break;
             case 'R': // room setup
                 global.gameWidth = m[0];
