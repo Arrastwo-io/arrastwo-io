@@ -293,7 +293,7 @@ function getMockups() {
 }
 window.onload = async () => {
     const serverData = await (await fetch("/serverData.json")).json();
-    if (serverData.filter(r => r.gameMode == "").length) location.reload();
+    //if (serverData.filter(r => r.gameMode == "").length) location.reload();
     window.serverAdd = serverData[0].ip + ":" + serverData[0].port;
     const servers = serverData;
     let serverSelector = document.getElementById("serverSelector"),
@@ -328,7 +328,8 @@ window.onload = async () => {
                 }
                 tr.classList.add("selected");
                 myServer = tr;
-                window.serverAdd = server.ip + ":" + server.port;
+                window.serverAdd = server.ip;
+                if (server.port != serverData[0].port) window.serverAdd = window.serverAdd + ":" + server.port;
                 getMockups();
             };
             tbody.appendChild(tr);

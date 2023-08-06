@@ -1,8 +1,10 @@
 const defaults = require("../../../server/config.js");
 
 const gamemode = {
-    cycle: true,
-    game: [],
+    cycle: false,
+    game: [
+        "FFA"
+    ],
     mode: [],
     ROOM_SETUP: [
         [ "boss", "boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss", "boss" ],
