@@ -1,6 +1,6 @@
 # Minor Update: v1.2
 - Added more servers
-- Thanks to Æ🚫Ḧ̸́̐ë̴̑l̵̐̋lo for helping out with server browsing! You can check out his project - arras2ioonline.glitch.me
+- Thanks to Æ🚫Ḧ̸́̐ë̴̑l̵̐̋lo for helping out with server browsing! You can check out his project here
 
 # CHAPTER 2 has arrived!: v1.1
 - Welcome to our new redesigned republic of arras2.io!
